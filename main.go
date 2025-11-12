@@ -1,8 +1,11 @@
 package main
 
 import (
+	"Golang/HttpHandler"
 	"Golang/greeter"
 	"fmt"
+	"log"
+	"net/http"
 
 	"rsc.io/quote"
 )
@@ -26,4 +29,13 @@ func main() {
 
 	greeter.Hello("World")
 	greeter.Hello("Bohdan")
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", HttpHandler.HelloHandler)
+
+	log.Println("Listening on :3000")
+
+	if err := http.ListenAndServe(":3000", mux); err != nil {
+		log.Fatal(err)
+	}
 }
