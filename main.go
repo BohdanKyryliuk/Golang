@@ -1,7 +1,9 @@
 package main
 
 import (
+	"Golang/greeter"
 	"fmt"
+
 	"rsc.io/quote"
 )
 
@@ -21,4 +23,7 @@ func main() {
 	}
 
 	fmt.Println(quote.Go())
+
+	greeter.Hello("World")
+	greeter.Hello("Bohdan")
 }
