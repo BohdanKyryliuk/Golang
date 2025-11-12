@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"rsc.io/quote"
 )
 
 //TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
@@ -18,4 +19,6 @@ func main() {
 		// for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.</p>
 		fmt.Println("i =", 100/i)
 	}
+
+	fmt.Println(quote.Go())
 }
