@@ -34,6 +34,13 @@ func main() {
 	go greeter.Hello("Bohdan Kyryliuk")
 	time.Sleep(time.Second * 3)
 
+	ch := make(chan string)
+	go func() {
+		ch <- "Hello, Channel!"
+	}()
+
+	fmt.Println(<-ch)
+
 	// Setting up HTTP server with handlers
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", HttpHandler.HelloHandler)
