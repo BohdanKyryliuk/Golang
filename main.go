@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"rsc.io/quote"
 )
@@ -30,6 +31,10 @@ func main() {
 	greeter.Hello("World")
 	greeter.Hello("Bohdan")
 
+	go greeter.Hello("Bohdan Kyryliuk")
+	time.Sleep(time.Second * 3)
+
+	// Setting up HTTP server with handlers
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", HttpHandler.HelloHandler)
 	mux.HandleFunc("/count", HttpHandler.CounterHandler)
