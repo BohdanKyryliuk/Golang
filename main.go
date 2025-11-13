@@ -46,6 +46,12 @@ func main() {
 	}
 	fmt.Println(message)
 
+	message, err = greeter.Hello("Gladys")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(message)
+
 	// Uncomment to see the error handling in action
 	//message, err = greeter.Hello("")
 	// If an error was returned, print it to the console and
