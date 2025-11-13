@@ -32,6 +32,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", HttpHandler.HelloHandler)
+	mux.HandleFunc("/count", HttpHandler.CounterHandler)
 
 	log.Println("Listening on :3000")
 
