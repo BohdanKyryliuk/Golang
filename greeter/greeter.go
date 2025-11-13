@@ -13,6 +13,8 @@ func Hello(name string) (string, error) {
 	}
 
 	message := fmt.Sprintf(randomFormat(), name)
+	// To break the deterministic tests, uncomment the following line.
+	//message := fmt.Sprint(randomFormat())
 	return message, nil
 }
 
