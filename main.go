@@ -64,6 +64,28 @@ func main() {
 	// to the console.
 	//fmt.Println(message)
 
+	// A slice of names.
+	names := []string{"Gladys", "Samantha", "Darrin"}
+
+	// Request greeting messages for the names.
+	messages, err := greeter.Hellos(names)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// If no error was returned, print the returned map of
+	// messages to the console.
+	fmt.Println(messages)
+
+	// Uncomment to see the error handling in action
+	//names = []string{"Bohdan", "Kyryliuk", ""}
+	//messages, err = greeter.Hellos(names)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//fmt.Println(messages)
+
 	// Using goroutine to call Hello function concurrently
 	hello, err := greeter.Hello("Bohdan Kyryliuk")
 	if err != nil {
