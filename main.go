@@ -28,10 +28,43 @@ func main() {
 
 	fmt.Println(quote.Go())
 
-	greeter.Hello("World")
-	greeter.Hello("Bohdan")
+	// Set properties of the predefined Logger, including
+	// the log entry prefix and a flag to disable printing
+	// the time, source file, and line number.
+	log.SetPrefix("greetings: ")
+	log.SetFlags(0)
 
-	go greeter.Hello("Bohdan Kyryliuk")
+	message, err := greeter.Hello("World")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(message)
+
+	message, err = greeter.Hello("Bohdan")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(message)
+
+	// Uncomment to see the error handling in action
+	//message, err = greeter.Hello("")
+	// If an error was returned, print it to the console and
+	// exit the program.
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+
+	// If no error was returned, print the returned message
+	// to the console.
+	//fmt.Println(message)
+
+	// Using goroutine to call Hello function concurrently
+	hello, err := greeter.Hello("Bohdan Kyryliuk")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	go fmt.Println(hello)
 	time.Sleep(time.Second * 3)
 
 	ch := make(chan string)
