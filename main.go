@@ -15,6 +15,9 @@ import (
 //TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
 // the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.</p>
 
+// Predefined variables
+var c, python, java, php, golang bool
+
 func main() {
 	//TIP <p>Press <shortcut actionId="ShowIntentionActions"/> when your caret is at the underlined text
 	// to see how GoLand suggests fixing the warning.</p><p>Alternatively, if available, click the lightbulb to view possible fixes.</p>
@@ -105,6 +108,14 @@ func main() {
 
 	// The Go Playground
 	GoPlayground.Playground()
+
+	// Variables
+	var i int
+	fmt.Println(i, c, python, java, php, golang)
+
+	// Short variable declaration
+	x := 42
+	fmt.Println(x)
 
 	// Setting up HTTP server with handlers
 	mux := http.NewServeMux()
