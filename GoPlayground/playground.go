@@ -16,4 +16,8 @@ func Playground() {
 
 	// Imports
 	fmt.Printf("Now you have %g problems.\n", math.Sqrt(7))
+
+	// Exported names
+	// fmt.Println(math.pi) // This will cause a compile-time error: math.pi is not exported
+	fmt.Println(math.Pi)
 }
