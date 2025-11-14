@@ -9,7 +9,8 @@ import (
 )
 
 // Predefined variables
-var c, python, java, php, golang bool
+var c, python, java, php, golang = true, false, "no!", `yes!`, "Golang!"
+var i, j int = 1, 2
 
 func Playground() {
 	fmt.Println("Welcome to the Go Playground!")
@@ -37,7 +38,7 @@ func Playground() {
 
 	// Variables
 	var y int
-	fmt.Println(y, c, python, java, php, golang)
+	fmt.Println(i, j, y, c, python, java, php, golang)
 
 	// Short variable declaration
 	x := 42
