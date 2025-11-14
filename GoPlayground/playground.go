@@ -24,4 +24,7 @@ func Playground() {
 
 	// Functions
 	fmt.Println(functions.Add(42, 13))
+
+	a, b := functions.Swap("hello", "world")
+	fmt.Println(a, b)
 }
