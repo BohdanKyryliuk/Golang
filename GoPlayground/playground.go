@@ -25,6 +25,10 @@ func Playground() {
 	// Functions
 	fmt.Println(functions.Add(42, 13))
 
+	// Multiple return values
 	a, b := functions.Swap("hello", "world")
 	fmt.Println(a, b)
+
+	// Named return values
+	fmt.Println(functions.Split(17))
 }
