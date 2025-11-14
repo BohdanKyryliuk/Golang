@@ -8,6 +8,9 @@ import (
 	"time"
 )
 
+// Predefined variables
+var c, python, java, php, golang bool
+
 func Playground() {
 	fmt.Println("Welcome to the Go Playground!")
 	fmt.Println("The time is", time.Now())
@@ -31,4 +34,12 @@ func Playground() {
 
 	// Named return values
 	fmt.Println(functions.Split(17))
+
+	// Variables
+	var y int
+	fmt.Println(y, c, python, java, php, golang)
+
+	// Short variable declaration
+	x := 42
+	fmt.Println(x)
 }
