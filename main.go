@@ -6,6 +6,7 @@ import (
 	"Golang/greeter"
 	"fmt"
 	"log"
+	"math"
 	"math/rand"
 	"net/http"
 	"time"
@@ -109,6 +110,9 @@ func main() {
 
 	// Packages
 	fmt.Println("My favorite number is", rand.Intn(10))
+
+	// Imports
+	fmt.Printf("Now you have %g problems.\n", math.Sqrt(7))
 
 	// Setting up HTTP server with handlers
 	mux := http.NewServeMux()
