@@ -97,8 +97,9 @@ func main() {
 	}
 
 	go fmt.Println(hello)
-	time.Sleep(time.Second * 3)
+	time.Sleep(time.Second) // Wait for the goroutine to finish
 
+	// Using channels to communicate between goroutines
 	ch := make(chan string)
 	go func() {
 		ch <- "Hello, Channel!"
