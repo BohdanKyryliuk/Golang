@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Golang/GoPlayground"
 	"Golang/HttpHandler"
 	"Golang/greeter"
 	"fmt"
@@ -101,6 +102,9 @@ func main() {
 	}()
 
 	fmt.Println(<-ch)
+
+	// The Go Playground
+	GoPlayground.Playground()
 
 	// Setting up HTTP server with handlers
 	mux := http.NewServeMux()
