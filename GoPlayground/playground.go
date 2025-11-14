@@ -38,7 +38,9 @@ func Playground() {
 
 	// Variables
 	var y int
-	fmt.Println(i, j, y, c, python, java, php, golang)
+	cPlusPlus, pythonDjango, javaScript := true, false, "no!"
+
+	fmt.Println(i, j, y, c, python, java, php, golang, cPlusPlus, pythonDjango, javaScript)
 
 	// Short variable declaration
 	x := 42
