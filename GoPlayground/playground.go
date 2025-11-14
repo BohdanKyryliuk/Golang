@@ -1,6 +1,7 @@
 package GoPlayground
 
 import (
+	"Golang/GoPlayground/functions"
 	"fmt"
 	"math"
 	"math/rand"
@@ -20,4 +21,7 @@ func Playground() {
 	// Exported names
 	// fmt.Println(math.pi) // This will cause a compile-time error: math.pi is not exported
 	fmt.Println(math.Pi)
+
+	// Functions
+	fmt.Println(functions.Add(42, 13))
 }
