@@ -65,4 +65,5 @@ func Variables() {
 func printLocal() {
 	l := "local"
 	fmt.Println(l)
+	fmt.Println(g)
 }
