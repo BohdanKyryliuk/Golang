@@ -2,15 +2,12 @@ package GoPlayground
 
 import (
 	"Golang/GoPlayground/functions"
+	"Golang/GoPlayground/variables"
 	"fmt"
 	"math"
 	"math/rand"
 	"time"
 )
-
-// Predefined variables
-var c, python, java, php, golang = true, false, "no!", `yes!`, "Golang!"
-var i, j int = 1, 2
 
 func Playground() {
 	fmt.Println("Welcome to the Go Playground!")
@@ -37,21 +34,5 @@ func Playground() {
 	fmt.Println(functions.Split(17))
 
 	// Variables
-	var y int
-	cPlusPlus, pythonDjango, javaScript := true, false, "no!"
-
-	fmt.Println(i, j, y, c, python, java, php, golang, cPlusPlus, pythonDjango, javaScript)
-
-	// Short variable declaration
-	x := 42
-	fmt.Println(x)
-
-	s := "Hello, World!"
-	f := 45.06
-	boolean := 5 > 9
-	array := [4]string{"item_1", "item_2", "item_3", "item_4"}
-	slice := []string{"one", "two", "three"}
-	m := map[string]string{"letter": "g", "number": "seven", "symbol": "&"}
-
-	fmt.Println(s, f, boolean, array, slice, m)
+	variables.Variables()
 }
