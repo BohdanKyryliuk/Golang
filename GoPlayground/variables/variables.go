@@ -7,6 +7,7 @@ var c, python, java, php, golang = true, false, "no!", `yes!`, "Golang!"
 var o, j int = 1, 2
 var Email string = "test@test.com" // email is exported because it starts with a capital letter
 var password string                // password is unexported because it starts with a lowercase letter
+var g = "global"
 
 func zeroValues() {
 	var a int
@@ -55,4 +56,13 @@ func Variables() {
 	printNames()
 
 	multipleAssignment()
+
+	// Global and local variables
+	printLocal()
+	fmt.Println(g)
+}
+
+func printLocal() {
+	l := "local"
+	fmt.Println(l)
 }
