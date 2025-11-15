@@ -16,29 +16,6 @@ const (
 	leapYear = int32(366) // typed constant
 )
 
-func zeroValues() {
-	var a int
-	var b string
-	var float float64
-	var d bool
-	fmt.Printf("var a %T = %+v\n", a, a)
-	fmt.Printf("var b %T = %q\n", b, b)
-	fmt.Printf("var float %T = %+v\n", float, float)
-	fmt.Printf("var d %T = %+v\n", d, d)
-}
-
-func printNames() {
-	names := []string{"Mary", "John", "Bob", "Anna"}
-	for i, n := range names {
-		fmt.Printf("index: %d = %q\n", i, n)
-	}
-}
-
-func multipleAssignment() {
-	m, k, l := "shark", 2.05, 15
-	fmt.Println(m, k, l)
-}
-
 func Variables() {
 	var y int
 	cPlusPlus, pythonDjango, javaScript := true, false, "no!"
@@ -72,6 +49,29 @@ func Variables() {
 	fmt.Println(num1)
 
 	constants()
+}
+
+func zeroValues() {
+	var a int
+	var b string
+	var float float64
+	var d bool
+	fmt.Printf("var a %T = %+v\n", a, a)
+	fmt.Printf("var b %T = %q\n", b, b)
+	fmt.Printf("var float %T = %+v\n", float, float)
+	fmt.Printf("var d %T = %+v\n", d, d)
+}
+
+func printNames() {
+	names := []string{"Mary", "John", "Bob", "Anna"}
+	for i, n := range names {
+		fmt.Printf("index: %d = %q\n", i, n)
+	}
+}
+
+func multipleAssignment() {
+	m, k, l := "shark", 2.05, 15
+	fmt.Println(m, k, l)
 }
 
 func constants() {
