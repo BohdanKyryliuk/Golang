@@ -8,6 +8,7 @@ var o, j int = 1, 2
 var Email string = "test@test.com" // email is exported because it starts with a capital letter
 var password string                // password is unexported because it starts with a lowercase letter
 var g = "global"
+var num1 = 5
 
 func zeroValues() {
 	var a int
@@ -60,10 +61,21 @@ func Variables() {
 	// Global and local variables
 	printLocal()
 	fmt.Println(g)
+
+	printNumbers()
+	fmt.Println(num1)
 }
 
 func printLocal() {
 	l := "local"
 	fmt.Println(l)
 	fmt.Println(g)
+}
+
+func printNumbers() {
+	num1 := 10
+	num2 := 7
+
+	fmt.Println(num1)
+	fmt.Println(num2)
 }
