@@ -10,6 +10,12 @@ var password string                // password is unexported because it starts w
 var g = "global"
 var num1 = 5
 
+const shark = "Sammy"
+const (
+	year     = 365        // untyped constant
+	leapYear = int32(366) // typed constant
+)
+
 func zeroValues() {
 	var a int
 	var b string
@@ -64,6 +70,20 @@ func Variables() {
 
 	printNumbers()
 	fmt.Println(num1)
+
+	constants()
+}
+
+func constants() {
+	// Constant
+	fmt.Println("Constant shark:", shark)
+	//shark = "Toddy" // This will cause a compile-time error: cannot assign to shark
+
+	hours := 24
+	minutes := int32(60)
+	fmt.Println(hours * year)
+	fmt.Println(minutes * year)
+	fmt.Println(minutes * leapYear)
 }
 
 func printLocal() {
