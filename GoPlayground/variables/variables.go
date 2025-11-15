@@ -5,6 +5,8 @@ import "fmt"
 // Predefined variables
 var c, python, java, php, golang = true, false, "no!", `yes!`, "Golang!"
 var i, j int = 1, 2
+var Email string = "test@test.com" // email is exported because it starts with a capital letter
+var password string                // password is unexported because it starts with a lowercase letter
 
 func zeroValues() {
 	var a int

@@ -35,4 +35,7 @@ func Playground() {
 
 	// Variables
 	variables.Variables()
+
+	fmt.Println("Email is", variables.Email) // Can use the exported variable 'Email' in the current package
+	// fmt.Println(variables.password) // Cannot use the unexported variable 'password' in the current package
 }
