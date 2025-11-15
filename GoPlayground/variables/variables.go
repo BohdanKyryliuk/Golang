@@ -19,6 +19,13 @@ func zeroValues() {
 	fmt.Printf("var d %T = %+v\n", d, d)
 }
 
+func printNames() {
+	names := []string{"Mary", "John", "Bob", "Anna"}
+	for i, n := range names {
+		fmt.Printf("index: %d = %q\n", i, n)
+	}
+}
+
 func Variables() {
 	var y int
 	cPlusPlus, pythonDjango, javaScript := true, false, "no!"
@@ -39,4 +46,6 @@ func Variables() {
 	fmt.Println(s, f, boolean, array, slice, m)
 
 	zeroValues()
+
+	printNames()
 }
