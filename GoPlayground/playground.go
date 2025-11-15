@@ -45,4 +45,13 @@ func Playground() {
 	// Short variable declaration
 	x := 42
 	fmt.Println(x)
+
+	s := "Hello, World!"
+	f := 45.06
+	boolean := 5 > 9
+	array := [4]string{"item_1", "item_2", "item_3", "item_4"}
+	slice := []string{"one", "two", "three"}
+	m := map[string]string{"letter": "g", "number": "seven", "symbol": "&"}
+
+	fmt.Println(s, f, boolean, array, slice, m)
 }
