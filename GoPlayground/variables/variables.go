@@ -4,7 +4,7 @@ import "fmt"
 
 // Predefined variables
 var c, python, java, php, golang = true, false, "no!", `yes!`, "Golang!"
-var i, j int = 1, 2
+var o, j int = 1, 2
 var Email string = "test@test.com" // email is exported because it starts with a capital letter
 var password string                // password is unexported because it starts with a lowercase letter
 
@@ -26,11 +26,16 @@ func printNames() {
 	}
 }
 
+func multipleAssignment() {
+	m, k, l := "shark", 2.05, 15
+	fmt.Println(m, k, l)
+}
+
 func Variables() {
 	var y int
 	cPlusPlus, pythonDjango, javaScript := true, false, "no!"
 
-	fmt.Println(i, j, y, c, python, java, php, golang, cPlusPlus, pythonDjango, javaScript)
+	fmt.Println(o, j, y, c, python, java, php, golang, cPlusPlus, pythonDjango, javaScript)
 
 	// Short variable declaration
 	x := 42
@@ -48,4 +53,6 @@ func Variables() {
 	zeroValues()
 
 	printNames()
+
+	multipleAssignment()
 }
