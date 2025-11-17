@@ -3,6 +3,7 @@ package GoPlayground
 import (
 	"Golang/GoPlayground/data_types"
 	"Golang/GoPlayground/functions"
+	"Golang/GoPlayground/loops"
 	"Golang/GoPlayground/variables"
 	"fmt"
 	"math"
@@ -62,6 +63,10 @@ func Playground() {
 	// Numeric Constants
 	printLabel("Numeric Constants:")
 	variables.NumericConstants()
+
+	// Loops
+	printLabel("Loops:")
+	loops.Loops()
 }
 
 func printLabel(label string) {
