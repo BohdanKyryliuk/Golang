@@ -67,6 +67,9 @@ func Playground() {
 	// Loops
 	printLabel("Loops:")
 	loops.Loops()
+
+	printLabel("Loop with Optional Init and Post:")
+	loops.LoopWithOptionalInitAndPost()
 }
 
 func printLabel(label string) {

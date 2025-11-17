@@ -9,3 +9,11 @@ func Loops() {
 	}
 	fmt.Println("Sum:", sum)
 }
+
+func LoopWithOptionalInitAndPost() {
+	sum := 1
+	for sum < 1000 {
+		sum += sum
+	}
+	fmt.Println("Sum with optional init and post:", sum)
+}
