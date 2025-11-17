@@ -58,6 +58,10 @@ func Playground() {
 	// Type Inference
 	printLabel("Type Inference:")
 	data_types.TypeInference()
+
+	// Numeric Constants
+	printLabel("Numeric Constants:")
+	variables.NumericConstants()
 }
 
 func printLabel(label string) {
