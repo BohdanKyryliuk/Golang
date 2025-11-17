@@ -54,6 +54,10 @@ func Playground() {
 	// Type Conversions
 	printLabel("Type Conversions:")
 	data_types.TypeConversions()
+
+	// Type Inference
+	printLabel("Type Inference:")
+	data_types.TypeInference()
 }
 
 func printLabel(label string) {

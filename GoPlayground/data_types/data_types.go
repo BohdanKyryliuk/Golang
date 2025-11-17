@@ -24,3 +24,12 @@ func TypeConversions() {
 	var z uint = uint(f)
 	fmt.Println(x, y, z)
 }
+
+func TypeInference() {
+	i := 42           // int
+	f := 3.142        // float64
+	g := 0.867 + 0.5i // complex128
+	fmt.Printf("Type: %T Value: %v\n", i, i)
+	fmt.Printf("Type: %T Value: %v\n", f, f)
+	fmt.Printf("Type: %T Value: %v\n", g, g)
+}
