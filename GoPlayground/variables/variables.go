@@ -10,11 +10,14 @@ var password string                // password is unexported because it starts w
 var g = "global"
 var num1 = 5
 
+// Constants
+// can be character, string, boolean, or numeric values.
 const shark = "Sammy"
 const (
 	year     = 365        // untyped constant
 	leapYear = int32(366) // typed constant
 )
+const PI = 3.1415926535
 
 func Variables() {
 	var y int
@@ -84,6 +87,13 @@ func constants() {
 	fmt.Println(hours * year)
 	fmt.Println(minutes * year)
 	fmt.Println(minutes * leapYear)
+
+	const World = "世界"
+	fmt.Println("Hello", World)
+	fmt.Println("Happy", PI, "Day")
+
+	const Truth = true
+	fmt.Println("Go rules?", Truth)
 }
 
 func printLocal() {
