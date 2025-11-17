@@ -2,6 +2,7 @@ package data_types
 
 import (
 	"fmt"
+	"math"
 	"math/cmplx"
 )
 
@@ -15,4 +16,11 @@ func DataTypes() {
 	fmt.Printf("Type: %T Value: %v\n", ToBe, ToBe)
 	fmt.Printf("Type: %T Value: %v\n", MaxInt, MaxInt)
 	fmt.Printf("Type: %T Value: %v\n", z, z)
+}
+
+func TypeConversions() {
+	var x, y int = 3, 4
+	var f float64 = math.Sqrt(float64(x*x + y*y))
+	var z uint = uint(f)
+	fmt.Println(x, y, z)
 }
