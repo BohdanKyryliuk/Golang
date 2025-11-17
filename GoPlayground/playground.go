@@ -1,6 +1,7 @@
 package GoPlayground
 
 import (
+	"Golang/GoPlayground/data_types"
 	"Golang/GoPlayground/functions"
 	"Golang/GoPlayground/variables"
 	"fmt"
@@ -38,4 +39,9 @@ func Playground() {
 
 	fmt.Println("Email is", variables.Email) // Can use the exported variable 'Email' in the current package
 	// fmt.Println(variables.password) // Cannot use the unexported variable 'password' in the current package
+
+	// Data Types
+	fmt.Println()
+	fmt.Println("Data Types:")
+	data_types.DataTypes()
 }
