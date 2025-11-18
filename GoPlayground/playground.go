@@ -3,6 +3,7 @@ package GoPlayground
 import (
 	"Golang/GoPlayground/data_types"
 	"Golang/GoPlayground/functions"
+	"Golang/GoPlayground/iota"
 	"Golang/GoPlayground/loops"
 	"Golang/GoPlayground/variables"
 	"fmt"
@@ -70,6 +71,14 @@ func Playground() {
 
 	printLabel("Loop with Optional Init and Post:")
 	loops.LoopWithOptionalInitAndPost()
+
+	// iota
+	printLabel("iota:")
+	printLabel("Byte Sizes using iota:")
+	iota.PrintIotaBytes()
+
+	printLabel("Days of the Week using iota:")
+	iota.PrintWeekdays()
 }
 
 func printLabel(label string) {
