@@ -72,6 +72,9 @@ func Playground() {
 	printLabel("Loop with Optional Init and Post:")
 	loops.LoopWithOptionalInitAndPost()
 
+	printLabel("Infinite Loop Example:")
+	loops.InfiniteLoopExample()
+
 	// iota
 	printLabel("iota:")
 	printLabel("Byte Sizes using iota:")

@@ -17,3 +17,14 @@ func LoopWithOptionalInitAndPost() {
 	}
 	fmt.Println("Sum with optional init and post:", sum)
 }
+
+func InfiniteLoopExample() {
+	count := 0
+	for {
+		if count >= 5 {
+			break
+		}
+		fmt.Println("Count:", count)
+		count++
+	}
+}
