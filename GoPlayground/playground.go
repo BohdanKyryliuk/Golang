@@ -1,6 +1,7 @@
 package GoPlayground
 
 import (
+	"Golang/GoPlayground/conditions"
 	"Golang/GoPlayground/data_types"
 	"Golang/GoPlayground/functions"
 	"Golang/GoPlayground/iota"
@@ -82,6 +83,16 @@ func Playground() {
 
 	printLabel("Days of the Week using iota:")
 	iota.PrintWeekdays()
+
+	// Conditions
+	printLabel("Conditions:")
+	fmt.Println(conditions.IfExample(5))
+	fmt.Println(conditions.IfWithShortStatement(6))
+	fmt.Println(conditions.NestedIfExample(-3))
+	fmt.Println(conditions.IfWithoutElse(0))
+	fmt.Println(conditions.IfMultipleConditions(15))
+	fmt.Println(conditions.IfWithLogicalOperators(50))
+	fmt.Println(conditions.Sqrt(-4))
 }
 
 func printLabel(label string) {
