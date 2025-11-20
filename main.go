@@ -1,11 +1,10 @@
 package main
 
 import (
-	"Golang/HttpHandler"
+	"Golang/GoPlayground"
 	"Golang/greeter"
 	"fmt"
 	"log"
-	"net/http"
 	"time"
 
 	"rsc.io/quote"
@@ -93,8 +92,9 @@ func main() {
 	}
 
 	go fmt.Println(hello)
-	time.Sleep(time.Second * 3)
+	time.Sleep(time.Second) // Wait for the goroutine to finish
 
+	// Using channels to communicate between goroutines
 	ch := make(chan string)
 	go func() {
 		ch <- "Hello, Channel!"
@@ -102,14 +102,9 @@ func main() {
 
 	fmt.Println(<-ch)
 
+	// The Go Playground
+	GoPlayground.Playground()
+
 	// Setting up HTTP server with handlers
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", HttpHandler.HelloHandler)
-	mux.HandleFunc("/count", HttpHandler.CounterHandler)
-
-	log.Println("Listening on :3000")
-
-	if err := http.ListenAndServe(":3000", mux); err != nil {
-		log.Fatal(err)
-	}
+	//web.StartServer()
 }
