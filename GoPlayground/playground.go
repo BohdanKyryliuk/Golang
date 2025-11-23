@@ -3,6 +3,7 @@ package GoPlayground
 import (
 	"Golang/GoPlayground/conditions"
 	"Golang/GoPlayground/data_types"
+	"Golang/GoPlayground/defer_example"
 	"Golang/GoPlayground/functions"
 	"Golang/GoPlayground/iota"
 	"Golang/GoPlayground/loops"
@@ -103,6 +104,12 @@ func Playground() {
 
 	printLabel("Greetings based on Time of Day:")
 	switch_example.Greetings()
+
+	printLabel("Defer example:")
+	defer_example.DeferExample()
+
+	printLabel("Stacking defers:")
+	defer_example.StackingDefers()
 }
 
 func printLabel(label string) {
