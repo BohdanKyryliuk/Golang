@@ -6,6 +6,7 @@ import (
 	"Golang/GoPlayground/functions"
 	"Golang/GoPlayground/iota"
 	"Golang/GoPlayground/loops"
+	"Golang/GoPlayground/switch"
 	"Golang/GoPlayground/variables"
 	"fmt"
 	"math"
@@ -93,6 +94,15 @@ func Playground() {
 	fmt.Println(conditions.IfMultipleConditions(15))
 	fmt.Println(conditions.IfWithLogicalOperators(50))
 	fmt.Println(conditions.Sqrt(-4))
+
+	printLabel("Switch Example:")
+	switch_example.SwitchExample()
+
+	printLabel("When is Saturday?:")
+	switch_example.PrintWhenIsSaturday()
+
+	printLabel("Greetings based on Time of Day:")
+	switch_example.Greetings()
 }
 
 func printLabel(label string) {
