@@ -7,6 +7,7 @@ import (
 	"Golang/GoPlayground/functions"
 	"Golang/GoPlayground/iota"
 	"Golang/GoPlayground/loops"
+	"Golang/GoPlayground/more_types"
 	"Golang/GoPlayground/switch"
 	"Golang/GoPlayground/variables"
 	"fmt"
@@ -110,6 +111,9 @@ func Playground() {
 
 	printLabel("Stacking defers:")
 	defer_example.StackingDefers()
+
+	printLabel("Pointers example:")
+	more_types.PointersExample()
 }
 
 func printLabel(label string) {
