@@ -114,6 +114,9 @@ func Playground() {
 
 	printLabel("Pointers example:")
 	more_types.PointersExample()
+
+	printLabel("Structs example:")
+	more_types.StructsExample()
 }
 
 func printLabel(label string) {
