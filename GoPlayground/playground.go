@@ -141,6 +141,9 @@ func Playground() {
 
 	printLabel("Maps example:")
 	more_types.MapsExample()
+
+	printLabel("Mutating Maps example:")
+	more_types.MutatingMapsExample()
 }
 
 func printLabel(label string) {
