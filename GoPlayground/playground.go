@@ -117,6 +117,9 @@ func Playground() {
 
 	printLabel("Structs example:")
 	more_types.StructsExample()
+
+	printLabel("Struct Literal example:")
+	more_types.StructLiteralExample()
 }
 
 func printLabel(label string) {
