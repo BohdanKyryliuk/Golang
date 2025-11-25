@@ -138,6 +138,9 @@ func Playground() {
 
 	printLabel("Range example:")
 	more_types.RangeExample()
+
+	printLabel("Maps example:")
+	more_types.MapsExample()
 }
 
 func printLabel(label string) {
