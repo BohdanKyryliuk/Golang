@@ -1,6 +1,9 @@
 package more_types
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func SliceLiteralsExample() {
 	q := []int{2, 3, 5, 7, 11, 13}
@@ -62,5 +65,25 @@ func NilSliceExample() {
 	fmt.Println(s, len(s), cap(s))
 	if s == nil {
 		fmt.Println("nil!")
+	}
+}
+
+func SlicesOfSlicesExample() {
+	// Create a tic-tac-toe board.
+	board := [][]string{
+		{"_", "_", "_"},
+		{"_", "_", "_"},
+		{"_", "_", "_"},
+	}
+
+	// The players take turns.
+	board[0][0] = "X"
+	board[2][2] = "O"
+	board[1][2] = "X"
+	board[1][0] = "O"
+	board[0][2] = "X"
+
+	for i := 0; i < len(board); i++ {
+		fmt.Printf("%s\n", strings.Join(board[i], " "))
 	}
 }
