@@ -129,6 +129,9 @@ func Playground() {
 
 	printLabel("Slice Length and Capacity example:")
 	more_types.SliceLengthAndCapacityExample()
+
+	printLabel("Nil Slice example:")
+	more_types.NilSliceExample()
 }
 
 func printLabel(label string) {
