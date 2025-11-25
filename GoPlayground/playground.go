@@ -120,6 +120,9 @@ func Playground() {
 
 	printLabel("Struct Literal example:")
 	more_types.StructLiteralExample()
+
+	printLabel("Slice Literals example:")
+	more_types.SliceLiteralsExample()
 }
 
 func printLabel(label string) {
