@@ -135,6 +135,9 @@ func Playground() {
 
 	printLabel("Slices of Slices example:")
 	more_types.SlicesOfSlicesExample()
+
+	printLabel("Range example:")
+	more_types.RangeExample()
 }
 
 func printLabel(label string) {
