@@ -126,6 +126,9 @@ func Playground() {
 
 	printLabel("Slice Defaults example:")
 	more_types.SliceDefaultsExample()
+
+	printLabel("Slice Length and Capacity example:")
+	more_types.SliceLengthAndCapacityExample()
 }
 
 func printLabel(label string) {
