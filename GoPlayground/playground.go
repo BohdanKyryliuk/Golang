@@ -150,6 +150,9 @@ func Playground() {
 
 	printLabel("Function Values example:")
 	more_types.FunctionValuesExample()
+
+	printLabel("Function Closures example:")
+	more_types.FunctionClosuresExample()
 }
 
 func printLabel(label string) {
