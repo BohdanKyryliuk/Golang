@@ -144,6 +144,9 @@ func Playground() {
 
 	printLabel("Mutating Maps example:")
 	more_types.MutatingMapsExample()
+
+	printLabel("Word Count example:")
+	more_types.WordCountExample()
 }
 
 func printLabel(label string) {
