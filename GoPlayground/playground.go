@@ -147,6 +147,9 @@ func Playground() {
 
 	printLabel("Word Count example:")
 	more_types.WordCountExample()
+
+	printLabel("Function Values example:")
+	more_types.FunctionValuesExample()
 }
 
 func printLabel(label string) {
