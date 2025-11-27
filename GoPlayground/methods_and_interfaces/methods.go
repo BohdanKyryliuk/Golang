@@ -29,6 +29,11 @@ func Scale(v *Vertex, f float64) {
 	v.Y = v.Y * f
 }
 
+func ScaleFunc(v *Vertex, f float64) {
+	v.X = v.X * f
+	v.Y = v.Y * f
+}
+
 func MethodsExample() {
 	v := Vertex{3, 4}
 	fmt.Println(v.Abs())
@@ -39,4 +44,14 @@ func MethodsExample() {
 
 	Scale(&v, 10)
 	fmt.Println(Abs(v))
+
+	v1 := Vertex{3, 4}
+	v1.Scale(2)
+	ScaleFunc(&v1, 10)
+
+	p := &Vertex{4, 3}
+	p.Scale(3)
+	ScaleFunc(p, 8)
+
+	fmt.Println(v1, p)
 }
