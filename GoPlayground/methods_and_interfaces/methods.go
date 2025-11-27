@@ -23,7 +23,6 @@ func (v *Vertex) Scale(f float64) {
 func Abs(v Vertex) float64 {
 	return math.Sqrt(v.X*v.X + v.Y*v.Y)
 }
-
 func Scale(v *Vertex, f float64) {
 	v.X = v.X * f
 	v.Y = v.Y * f
@@ -32,6 +31,10 @@ func Scale(v *Vertex, f float64) {
 func ScaleFunc(v *Vertex, f float64) {
 	v.X = v.X * f
 	v.Y = v.Y * f
+}
+
+func AbsFunc(v Vertex) float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
 }
 
 func MethodsExample() {
@@ -54,4 +57,12 @@ func MethodsExample() {
 	ScaleFunc(p, 8)
 
 	fmt.Println(v1, p)
+
+	v2 := Vertex{3, 4}
+	fmt.Println(v2.Abs())
+	fmt.Println(AbsFunc(v2))
+
+	p2 := &Vertex{4, 3}
+	fmt.Println(p2.Abs())
+	fmt.Println(AbsFunc(*p2))
 }
