@@ -13,7 +13,18 @@ func (v Vertex) Abs() float64 {
 	return math.Sqrt(v.X*v.X + v.Y*v.Y)
 }
 
+// Scale method scales the Vertex by a given factor f.
+// This method has a pointer receiver, so it can modify the original Vertex.
+func (v *Vertex) Scale(f float64) {
+	v.X = v.X * f
+	v.Y = v.Y * f
+}
+
 func MethodsExample() {
 	v := Vertex{3, 4}
 	fmt.Println(v.Abs())
+
+	v.Scale(10)
+	fmt.Println(v.Abs())
+	fmt.Println(v.X, v.Y)
 }
