@@ -7,6 +7,7 @@ import (
 	"Golang/GoPlayground/functions"
 	"Golang/GoPlayground/iota"
 	"Golang/GoPlayground/loops"
+	"Golang/GoPlayground/methods_and_interfaces"
 	"Golang/GoPlayground/more_types"
 	"Golang/GoPlayground/switch"
 	"Golang/GoPlayground/variables"
@@ -153,6 +154,9 @@ func Playground() {
 
 	printLabel("Function Closures example:")
 	more_types.FunctionClosuresExample()
+
+	printLabel("Methods example:")
+	methods_and_interfaces.MethodsExample()
 }
 
 func printLabel(label string) {
