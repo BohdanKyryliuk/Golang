@@ -160,6 +160,9 @@ func Playground() {
 
 	printLabel("Methods Continued example:")
 	methods_and_interfaces.MethodsContinued()
+
+	printLabel("Choosing value or pointer receiver example:")
+	methods_and_interfaces.ChoosingValueOrPointerReceiver()
 }
 
 func printLabel(label string) {

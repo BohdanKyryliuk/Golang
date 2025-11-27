@@ -9,7 +9,7 @@ type Vertex struct {
 	X, Y float64
 }
 
-func (v Vertex) Abs() float64 {
+func (v *Vertex) Abs() float64 {
 	return math.Sqrt(v.X*v.X + v.Y*v.Y)
 }
 
@@ -65,4 +65,16 @@ func MethodsExample() {
 	p2 := &Vertex{4, 3}
 	fmt.Println(p2.Abs())
 	fmt.Println(AbsFunc(*p2))
+}
+
+func ChoosingValueOrPointerReceiver() {
+	// Pointer receivers can modify the value that their receiver points to.
+	// Value receivers operate on a copy of the original value, so they cannot modify the original value.
+	// If a type has any pointer receiver methods, all its methods should have pointer receivers to avoid confusion.
+	// Value receivers can be used when the method does not need to modify the receiver and the receiver is small in size.
+
+	v := &Vertex{3, 4}
+	fmt.Printf("Before scaling: %+v, Abs: %v\n", v, v.Abs())
+	v.Scale(5)
+	fmt.Printf("After scaling: %+v, Abs: %v\n", v, v.Abs())
 }
