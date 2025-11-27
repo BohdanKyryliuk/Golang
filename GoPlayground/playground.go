@@ -166,6 +166,9 @@ func Playground() {
 
 	printLabel("Interfaces example:")
 	methods_and_interfaces.InterfacesExample()
+
+	printLabel("Interfaces Implemented Implicitly example:")
+	methods_and_interfaces.InterfacesImplementedImplicitly()
 }
 
 func printLabel(label string) {
