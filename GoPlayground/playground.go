@@ -157,6 +157,9 @@ func Playground() {
 
 	printLabel("Methods example:")
 	methods_and_interfaces.MethodsExample()
+
+	printLabel("Methods Continued example:")
+	methods_and_interfaces.MethodsContinued()
 }
 
 func printLabel(label string) {
