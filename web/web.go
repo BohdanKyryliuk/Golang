@@ -10,10 +10,11 @@ func StartServer() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", HttpHandler.HelloHandler)
 	mux.HandleFunc("/count", HttpHandler.CounterHandler)
+	mux.HandleFunc("/currency/status", HttpHandler.CurrencyStatusHandler)
 
-	log.Println("Listening on :3000")
+	log.Println("Listening on :3001")
 
-	if err := http.ListenAndServe(":3000", mux); err != nil {
+	if err := http.ListenAndServe(":3001", mux); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -1,11 +1,30 @@
 package currency_converter
 
 import (
+	"log"
+	"os"
+
 	"github.com/everapihq/currencyapi-go"
+	"github.com/joho/godotenv"
 )
 
 func initCurrencyApi() {
-	currencyapi.Init("cur_live_4izJseiR0m05pAtCFprAMJ06aROnF5pEqmHpccLE")
+	// Load .env file
+	loadEnv()
+
+	// Get API key from environment variable
+	apiKey := os.Getenv("CURRENCY_API_KEY")
+	if apiKey == "" {
+		log.Fatal("CURRENCY_API_KEY not set in .env file or environment variables")
+	}
+
+	currencyapi.Init(apiKey)
+}
+
+func loadEnv() {
+	if err := godotenv.Load(); err != nil {
+		log.Println("Warning: .env file not found, will use environment variables")
+	}
 }
 
 func CheckStatus() string {
