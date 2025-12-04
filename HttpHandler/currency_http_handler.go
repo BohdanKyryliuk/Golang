@@ -11,5 +11,5 @@ func CurrencyStatusHandler(w http.ResponseWriter, r *http.Request) {
 
 	status := currency_converter.CheckStatus()
 
-	fmt.Fprintf(w, status)
+	fmt.Fprintf(w, "%s", status)
 }
