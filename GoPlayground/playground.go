@@ -3,9 +3,13 @@ package GoPlayground
 import (
 	"Golang/GoPlayground/conditions"
 	"Golang/GoPlayground/data_types"
+	"Golang/GoPlayground/defer_example"
 	"Golang/GoPlayground/functions"
 	"Golang/GoPlayground/iota"
 	"Golang/GoPlayground/loops"
+	"Golang/GoPlayground/methods_and_interfaces"
+	"Golang/GoPlayground/more_types"
+	"Golang/GoPlayground/switch"
 	"Golang/GoPlayground/variables"
 	"fmt"
 	"math"
@@ -93,6 +97,81 @@ func Playground() {
 	fmt.Println(conditions.IfMultipleConditions(15))
 	fmt.Println(conditions.IfWithLogicalOperators(50))
 	fmt.Println(conditions.Sqrt(-4))
+
+	printLabel("Switch Example:")
+	switch_example.SwitchExample()
+
+	printLabel("When is Saturday?:")
+	switch_example.PrintWhenIsSaturday()
+
+	printLabel("Greetings based on Time of Day:")
+	switch_example.Greetings()
+
+	printLabel("Defer example:")
+	defer_example.DeferExample()
+
+	printLabel("Stacking defers:")
+	defer_example.StackingDefers()
+
+	printLabel("Pointers example:")
+	more_types.PointersExample()
+
+	printLabel("Structs example:")
+	more_types.StructsExample()
+
+	printLabel("Struct Literal example:")
+	more_types.StructLiteralExample()
+
+	printLabel("Slice Literals example:")
+	more_types.SliceLiteralsExample()
+
+	printLabel("Slice Defaults example:")
+	more_types.SliceDefaultsExample()
+
+	printLabel("Slice Length and Capacity example:")
+	more_types.SliceLengthAndCapacityExample()
+
+	printLabel("Nil Slice example:")
+	more_types.NilSliceExample()
+
+	printLabel("Slices of Slices example:")
+	more_types.SlicesOfSlicesExample()
+
+	printLabel("Range example:")
+	more_types.RangeExample()
+
+	printLabel("Maps example:")
+	more_types.MapsExample()
+
+	printLabel("Mutating Maps example:")
+	more_types.MutatingMapsExample()
+
+	printLabel("Word Count example:")
+	more_types.WordCountExample()
+
+	printLabel("Function Values example:")
+	more_types.FunctionValuesExample()
+
+	printLabel("Function Closures example:")
+	more_types.FunctionClosuresExample()
+
+	printLabel("Methods example:")
+	methods_and_interfaces.MethodsExample()
+
+	printLabel("Methods Continued example:")
+	methods_and_interfaces.MethodsContinued()
+
+	printLabel("Choosing value or pointer receiver example:")
+	methods_and_interfaces.ChoosingValueOrPointerReceiver()
+
+	printLabel("Interfaces example:")
+	methods_and_interfaces.InterfacesExample()
+
+	printLabel("Interfaces Implemented Implicitly example:")
+	methods_and_interfaces.InterfacesImplementedImplicitly()
+
+	printLabel("Interface values example:")
+	methods_and_interfaces.InterfaceValuesExample()
 }
 
 func printLabel(label string) {
