@@ -3,6 +3,7 @@ package main
 import (
 	"Golang/GoPlayground"
 	"Golang/greeter"
+	"Golang/web"
 	"fmt"
 	"log"
 	"time"
@@ -106,5 +107,21 @@ func main() {
 	GoPlayground.Playground()
 
 	// Setting up HTTP server with handlers
-	//web.StartServer()
+	web.StartServer()
+
+	fmt.Println()
+
+	// Currency API example
+	//status := currency_converter.CheckStatus()
+	//fmt.Println("Currency API Status:", status)
+
+	//fmt.Println()
+
+	// Get and print supported currencies
+	//currencies := currency_converter.GetCurrencies()
+	//fmt.Println("Supported Currencies:", currencies)
+
+	// Get and print latest currency rates
+	//latestRates := currency_converter.GetLatestRates()
+	//fmt.Println("Latest Currency Rates:", latestRates)
 }
