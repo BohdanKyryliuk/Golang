@@ -5,16 +5,23 @@ import (
 	"encoding/json"
 	"errors"
 	"log"
-	"os"
 	"time"
 
+	"Golang/config"
 	"Golang/currencyapi"
-
-	"github.com/joho/godotenv"
 )
 
-// client is the CurrencyAPI client instance
-var client *currencyapi.Client
+// Client represents a currency converter client with its dependencies
+type Client struct {
+	config    Config
+	apiClient *currencyapi.Client
+}
+
+// Config holds configuration for the currency converter
+type Config struct {
+	APIKey  string
+	Timeout time.Duration
+}
 
 // CurrencyConverterError wraps errors from the currency converter
 type CurrencyConverterError struct {
@@ -30,57 +37,65 @@ func (e *CurrencyConverterError) Unwrap() error {
 	return e.Err
 }
 
-// initCurrencyApi initializes the currency API client
-func initCurrencyApi() error {
-	if client != nil {
-		return nil // Already initialized
-	}
-
-	// Load .env file
-	loadEnv()
-
-	// Get API key from environment variable
-	apiKey := os.Getenv("CURRENCY_API_KEY")
-	if apiKey == "" {
-		return &CurrencyConverterError{
+// New creates a new Client from a Config struct
+func New(cfg Config) (*Client, error) {
+	if cfg.APIKey == "" {
+		return nil, &CurrencyConverterError{
 			Operation: "init",
-			Err:       errors.New("CURRENCY_API_KEY not set in .env file or environment variables"),
+			Err:       errors.New("API key is required"),
 		}
 	}
 
-	var err error
-	client, err = currencyapi.NewClient(
-		apiKey,
-		currencyapi.WithTimeout(15*time.Second),
+	// Set default timeout if not provided
+	if cfg.Timeout == 0 {
+		cfg.Timeout = 15 * time.Second
+	}
+
+	apiClient, err := currencyapi.NewClient(
+		cfg.APIKey,
+		currencyapi.WithTimeout(cfg.Timeout),
 	)
 	if err != nil {
-		return &CurrencyConverterError{
+		return nil, &CurrencyConverterError{
 			Operation: "create_client",
 			Err:       err,
 		}
 	}
 
-	return nil
+	return &Client{
+		config:    cfg,
+		apiClient: apiClient,
+	}, nil
 }
 
-func loadEnv() {
-	if err := godotenv.Load(); err != nil {
-		log.Println("Warning: .env file not found, will use environment variables")
+// NewFromEnv creates a new Client by loading configuration from environment variables
+// This is a convenience function that loads config from the config package
+func NewFromEnv() (*Client, error) {
+	cfg, err := config.LoadCurrencyAPIConfig(nil)
+	if err != nil {
+		return nil, &CurrencyConverterError{
+			Operation: "load_config",
+			Err:       err,
+		}
 	}
+
+	return New(Config{
+		APIKey:  cfg.APIKey,
+		Timeout: cfg.Timeout,
+	})
 }
 
 // CheckStatus returns the API status or an error
-func CheckStatus() (string, error) {
-	if err := initCurrencyApi(); err != nil {
-		return "", err
+func (c *Client) CheckStatus(ctx context.Context) (string, error) {
+	if ctx == nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	status, err := client.Status(ctx)
+	status, err := c.apiClient.Status(ctx)
 	if err != nil {
-		return "", handleAPIError("check_status", err)
+		return "", c.handleAPIError("check_status", err)
 	}
 
 	jsonBytes, err := json.Marshal(status)
@@ -94,17 +109,16 @@ func CheckStatus() (string, error) {
 }
 
 // GetCurrencies returns available currencies or an error
-func GetCurrencies() (string, error) {
-	if err := initCurrencyApi(); err != nil {
-		return "", err
+func (c *Client) GetCurrencies(ctx context.Context) (string, error) {
+	if ctx == nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	currencies, err := client.Currencies(ctx, nil)
+	currencies, err := c.apiClient.Currencies(ctx, nil)
 	if err != nil {
-		return "", handleAPIError("get_currencies", err)
+		return "", c.handleAPIError("get_currencies", err)
 	}
 
 	jsonBytes, err := json.Marshal(currencies)
@@ -118,20 +132,19 @@ func GetCurrencies() (string, error) {
 }
 
 // GetLatestRates returns the latest exchange rates or an error
-func GetLatestRates() (string, error) {
-	if err := initCurrencyApi(); err != nil {
-		return "", err
+func (c *Client) GetLatestRates(ctx context.Context) (string, error) {
+	if ctx == nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	latestRates, err := client.Latest(ctx, &currencyapi.LatestParams{
+	latestRates, err := c.apiClient.Latest(ctx, &currencyapi.LatestParams{
 		BaseCurrency: "USD",
 		Currencies:   []string{"UAH", "EUR"},
 	})
 	if err != nil {
-		return "", handleAPIError("get_latest_rates", err)
+		return "", c.handleAPIError("get_latest_rates", err)
 	}
 
 	jsonBytes, err := json.Marshal(latestRates)
@@ -145,7 +158,7 @@ func GetLatestRates() (string, error) {
 }
 
 // handleAPIError processes API errors and wraps them appropriately
-func handleAPIError(operation string, err error) error {
+func (c *Client) handleAPIError(operation string, err error) error {
 	// Log detailed error information
 	var apiErr *currencyapi.APIError
 	if errors.As(err, &apiErr) {

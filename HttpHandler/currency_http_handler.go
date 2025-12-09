@@ -3,22 +3,76 @@ package HttpHandler
 import (
 	"Golang/currency_converter"
 	"Golang/currencyapi"
+	"context"
 	"errors"
 	"fmt"
 	"log"
 	"net/http"
 )
 
-func CurrencyStatusHandler(w http.ResponseWriter, r *http.Request) {
+// CurrencyHandler holds the dependencies for currency-related HTTP handlers
+type CurrencyHandler struct {
+	client *currency_converter.Client
+}
+
+// NewCurrencyHandler creates a new CurrencyHandler with the given client
+func NewCurrencyHandler(client *currency_converter.Client) *CurrencyHandler {
+	return &CurrencyHandler{client: client}
+}
+
+// StatusHandler handles requests for currency API status
+func (h *CurrencyHandler) StatusHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
-	status, err := currency_converter.CheckStatus()
+	status, err := h.client.CheckStatus(r.Context())
 	if err != nil {
 		handleCurrencyError(w, err)
 		return
 	}
 
 	fmt.Fprintf(w, "%s", status)
+}
+
+// CurrenciesHandler handles requests for available currencies
+func (h *CurrencyHandler) CurrenciesHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+
+	currencies, err := h.client.GetCurrencies(r.Context())
+	if err != nil {
+		handleCurrencyError(w, err)
+		return
+	}
+
+	fmt.Fprintf(w, "%s", currencies)
+}
+
+// LatestRatesHandler handles requests for latest exchange rates
+func (h *CurrencyHandler) LatestRatesHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+
+	rates, err := h.client.GetLatestRates(r.Context())
+	if err != nil {
+		handleCurrencyError(w, err)
+		return
+	}
+
+	fmt.Fprintf(w, "%s", rates)
+}
+
+// CurrencyStatusHandler is a legacy handler for backward compatibility
+// Deprecated: Use NewCurrencyHandler().StatusHandler instead
+func CurrencyStatusHandler(client *currency_converter.Client) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+
+		status, err := client.CheckStatus(context.Background())
+		if err != nil {
+			handleCurrencyError(w, err)
+			return
+		}
+
+		fmt.Fprintf(w, "%s", status)
+	}
 }
 
 // handleCurrencyError handles errors from the currency converter with appropriate HTTP responses
