@@ -19,8 +19,9 @@ type Client struct {
 
 // Config holds configuration for the currency converter
 type Config struct {
-	APIKey  string
-	Timeout time.Duration
+	APIKey         string
+	Timeout        time.Duration // HTTP client timeout
+	RequestTimeout time.Duration // Individual request timeout (default: 10s)
 }
 
 // CurrencyConverterError wraps errors from the currency converter
@@ -49,6 +50,11 @@ func New(cfg Config) (*Client, error) {
 	// Set default timeout if not provided
 	if cfg.Timeout == 0 {
 		cfg.Timeout = 15 * time.Second
+	}
+
+	// Set default request timeout if not provided
+	if cfg.RequestTimeout == 0 {
+		cfg.RequestTimeout = 10 * time.Second
 	}
 
 	apiClient, err := currencyapi.NewClient(
@@ -89,7 +95,7 @@ func NewFromEnv() (*Client, error) {
 func (c *Client) CheckStatus(ctx context.Context) (string, error) {
 	if ctx == nil {
 		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
+		ctx, cancel = context.WithTimeout(context.Background(), c.config.RequestTimeout)
 		defer cancel()
 	}
 
@@ -112,7 +118,7 @@ func (c *Client) CheckStatus(ctx context.Context) (string, error) {
 func (c *Client) GetCurrencies(ctx context.Context) (string, error) {
 	if ctx == nil {
 		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
+		ctx, cancel = context.WithTimeout(context.Background(), c.config.RequestTimeout)
 		defer cancel()
 	}
 
@@ -135,7 +141,7 @@ func (c *Client) GetCurrencies(ctx context.Context) (string, error) {
 func (c *Client) GetLatestRates(ctx context.Context) (string, error) {
 	if ctx == nil {
 		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
+		ctx, cancel = context.WithTimeout(context.Background(), c.config.RequestTimeout)
 		defer cancel()
 	}
 
