@@ -137,18 +137,31 @@ func (c *Client) GetCurrencies(ctx context.Context) (string, error) {
 	return string(jsonBytes), nil
 }
 
+// LatestRatesParams holds parameters for fetching latest rates
+type LatestRatesParams struct {
+	BaseCurrency string   // Base currency code (default: USD)
+	Currencies   []string // Target currency codes to fetch
+}
+
 // GetLatestRates returns the latest exchange rates or an error
-func (c *Client) GetLatestRates(ctx context.Context) (string, error) {
+func (c *Client) GetLatestRates(ctx context.Context, params *LatestRatesParams) (string, error) {
 	if ctx == nil {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(context.Background(), c.config.RequestTimeout)
 		defer cancel()
 	}
 
-	latestRates, err := c.apiClient.Latest(ctx, &currencyapi.LatestParams{
-		BaseCurrency: "USD",
-		Currencies:   []string{"UAH", "EUR"},
-	})
+	// Build API params with defaults
+	apiParams := &currencyapi.LatestParams{}
+	if params != nil {
+		apiParams.BaseCurrency = params.BaseCurrency
+		apiParams.Currencies = params.Currencies
+	}
+	if apiParams.BaseCurrency == "" {
+		apiParams.BaseCurrency = "USD"
+	}
+
+	latestRates, err := c.apiClient.Latest(ctx, apiParams)
 	if err != nil {
 		return "", c.handleAPIError("get_latest_rates", err)
 	}

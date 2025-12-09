@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/BohdanKyryliuk/golang/currency_converter"
 	"github.com/BohdanKyryliuk/golang/currencyapi"
@@ -48,10 +49,19 @@ func (h *Currency) Currencies(w http.ResponseWriter, r *http.Request) {
 }
 
 // LatestRates handles requests for latest exchange rates
+// Query params: base (base currency), currencies (comma-separated list)
 func (h *Currency) LatestRates(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
-	rates, err := h.client.GetLatestRates(r.Context())
+	// Parse query parameters
+	params := &currency_converter.LatestRatesParams{
+		BaseCurrency: r.URL.Query().Get("base"),
+	}
+	if currencies := r.URL.Query().Get("currencies"); currencies != "" {
+		params.Currencies = strings.Split(currencies, ",")
+	}
+
+	rates, err := h.client.GetLatestRates(r.Context(), params)
 	if err != nil {
 		handleCurrencyError(w, err)
 		return
