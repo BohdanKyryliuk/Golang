@@ -1,13 +1,14 @@
 package handler
 
 import (
-	"Golang/currency_converter"
-	"Golang/currencyapi"
 	"context"
 	"errors"
 	"fmt"
 	"log"
 	"net/http"
+
+	"Golang/currency_converter"
+	"Golang/currencyapi"
 )
 
 // Currency holds the dependencies for currency-related HTTP handlers

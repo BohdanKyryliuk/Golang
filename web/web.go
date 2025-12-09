@@ -1,10 +1,11 @@
 package web
 
 import (
-	"Golang/currency_converter"
-	"Golang/http/handler"
 	"log"
 	"net/http"
+
+	"Golang/currency_converter"
+	"Golang/http/handler"
 )
 
 func StartServer() {
