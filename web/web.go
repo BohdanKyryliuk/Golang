@@ -1,8 +1,8 @@
 package web
 
 import (
-	"Golang/HttpHandler"
 	"Golang/currency_converter"
+	"Golang/http/handler"
 	"log"
 	"net/http"
 )
@@ -16,15 +16,15 @@ func StartServer() {
 	}
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", HttpHandler.HelloHandler)
-	mux.HandleFunc("/count", HttpHandler.CounterHandler)
+	mux.HandleFunc("/", handler.Hello)
+	mux.HandleFunc("/count", handler.Counter)
 
 	// Only register currency handlers if the client is available
 	if currencyClient != nil {
-		currencyHandler := HttpHandler.NewCurrencyHandler(currencyClient)
-		mux.HandleFunc("/currency/status", currencyHandler.StatusHandler)
-		mux.HandleFunc("/currency/currencies", currencyHandler.CurrenciesHandler)
-		mux.HandleFunc("/currency/latest", currencyHandler.LatestRatesHandler)
+		currencyHandler := handler.NewCurrency(currencyClient)
+		mux.HandleFunc("/currency/status", currencyHandler.Status)
+		mux.HandleFunc("/currency/currencies", currencyHandler.Currencies)
+		mux.HandleFunc("/currency/latest", currencyHandler.LatestRates)
 	}
 
 	log.Println("Listening on :3001")
@@ -38,14 +38,14 @@ func StartServer() {
 // This is useful for testing or when you want more control over the initialization
 func StartServerWithConfig(currencyClient *currency_converter.Client) {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", HttpHandler.HelloHandler)
-	mux.HandleFunc("/count", HttpHandler.CounterHandler)
+	mux.HandleFunc("/", handler.Hello)
+	mux.HandleFunc("/count", handler.Counter)
 
 	if currencyClient != nil {
-		currencyHandler := HttpHandler.NewCurrencyHandler(currencyClient)
-		mux.HandleFunc("/currency/status", currencyHandler.StatusHandler)
-		mux.HandleFunc("/currency/currencies", currencyHandler.CurrenciesHandler)
-		mux.HandleFunc("/currency/latest", currencyHandler.LatestRatesHandler)
+		currencyHandler := handler.NewCurrency(currencyClient)
+		mux.HandleFunc("/currency/status", currencyHandler.Status)
+		mux.HandleFunc("/currency/currencies", currencyHandler.Currencies)
+		mux.HandleFunc("/currency/latest", currencyHandler.LatestRates)
 	}
 
 	log.Println("Listening on :3001")

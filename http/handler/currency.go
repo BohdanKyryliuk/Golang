@@ -1,4 +1,4 @@
-package HttpHandler
+package handler
 
 import (
 	"Golang/currency_converter"
@@ -10,18 +10,18 @@ import (
 	"net/http"
 )
 
-// CurrencyHandler holds the dependencies for currency-related HTTP handlers
-type CurrencyHandler struct {
+// Currency holds the dependencies for currency-related HTTP handlers
+type Currency struct {
 	client *currency_converter.Client
 }
 
-// NewCurrencyHandler creates a new CurrencyHandler with the given client
-func NewCurrencyHandler(client *currency_converter.Client) *CurrencyHandler {
-	return &CurrencyHandler{client: client}
+// NewCurrency creates a new Currency handler with the given client
+func NewCurrency(client *currency_converter.Client) *Currency {
+	return &Currency{client: client}
 }
 
-// StatusHandler handles requests for currency API status
-func (h *CurrencyHandler) StatusHandler(w http.ResponseWriter, r *http.Request) {
+// Status handles requests for currency API status
+func (h *Currency) Status(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	status, err := h.client.CheckStatus(r.Context())
@@ -33,8 +33,8 @@ func (h *CurrencyHandler) StatusHandler(w http.ResponseWriter, r *http.Request) 
 	fmt.Fprintf(w, "%s", status)
 }
 
-// CurrenciesHandler handles requests for available currencies
-func (h *CurrencyHandler) CurrenciesHandler(w http.ResponseWriter, r *http.Request) {
+// Currencies handles requests for available currencies
+func (h *Currency) Currencies(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	currencies, err := h.client.GetCurrencies(r.Context())
@@ -46,8 +46,8 @@ func (h *CurrencyHandler) CurrenciesHandler(w http.ResponseWriter, r *http.Reque
 	fmt.Fprintf(w, "%s", currencies)
 }
 
-// LatestRatesHandler handles requests for latest exchange rates
-func (h *CurrencyHandler) LatestRatesHandler(w http.ResponseWriter, r *http.Request) {
+// LatestRates handles requests for latest exchange rates
+func (h *Currency) LatestRates(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
 	rates, err := h.client.GetLatestRates(r.Context())
@@ -59,9 +59,9 @@ func (h *CurrencyHandler) LatestRatesHandler(w http.ResponseWriter, r *http.Requ
 	fmt.Fprintf(w, "%s", rates)
 }
 
-// CurrencyStatusHandler is a legacy handler for backward compatibility
-// Deprecated: Use NewCurrencyHandler().StatusHandler instead
-func CurrencyStatusHandler(client *currency_converter.Client) http.HandlerFunc {
+// CurrencyStatus is a legacy handler for backward compatibility
+// Deprecated: Use NewCurrency().Status instead
+func CurrencyStatus(client *currency_converter.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 

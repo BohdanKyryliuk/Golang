@@ -1,4 +1,4 @@
-package HttpHandler
+package handler
 
 import (
 	"fmt"
@@ -6,7 +6,8 @@ import (
 	"strconv"
 )
 
-func HelloHandler(w http.ResponseWriter, r *http.Request) {
+// Hello handles the hello world endpoint
+func Hello(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	// Step 1: Write a simple Hello World response
 	_, _ = w.Write([]byte("<h1>Hello, World!</h1>"))
@@ -32,7 +33,8 @@ func HelloHandler(w http.ResponseWriter, r *http.Request) {
 	   `)
 }
 
-func CounterHandler(w http.ResponseWriter, r *http.Request) {
+// Counter handles the counter endpoint
+func Counter(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	// Step 3: Handle counter with POST method
 	if r.Method == "POST" {
