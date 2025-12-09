@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"Golang/config"
-	"Golang/currency_converter"
+	"github.com/BohdanKyryliuk/golang/config"
+	"github.com/BohdanKyryliuk/golang/currency_converter"
 )
 
 // Example_directConfig shows how to create a currency converter client

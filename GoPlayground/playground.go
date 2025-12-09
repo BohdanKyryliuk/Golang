@@ -1,16 +1,17 @@
 package GoPlayground
 
 import (
-	"Golang/GoPlayground/conditions"
-	"Golang/GoPlayground/data_types"
-	"Golang/GoPlayground/functions"
-	"Golang/GoPlayground/iota"
-	"Golang/GoPlayground/loops"
-	"Golang/GoPlayground/variables"
 	"fmt"
 	"math"
 	"math/rand"
 	"time"
+
+	"github.com/BohdanKyryliuk/golang/GoPlayground/conditions"
+	"github.com/BohdanKyryliuk/golang/GoPlayground/data_types"
+	"github.com/BohdanKyryliuk/golang/GoPlayground/functions"
+	"github.com/BohdanKyryliuk/golang/GoPlayground/iota"
+	"github.com/BohdanKyryliuk/golang/GoPlayground/loops"
+	"github.com/BohdanKyryliuk/golang/GoPlayground/variables"
 )
 
 func Playground() {

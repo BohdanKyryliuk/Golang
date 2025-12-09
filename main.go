@@ -1,14 +1,15 @@
 package main
 
 import (
-	"Golang/GoPlayground"
-	"Golang/greeter"
-	"Golang/web"
 	"fmt"
 	"log"
 	"time"
 
 	"rsc.io/quote"
+
+	"github.com/BohdanKyryliuk/golang/GoPlayground"
+	"github.com/BohdanKyryliuk/golang/greeter"
+	"github.com/BohdanKyryliuk/golang/web"
 )
 
 //TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click

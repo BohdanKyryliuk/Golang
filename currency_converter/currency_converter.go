@@ -7,8 +7,8 @@ import (
 	"log"
 	"time"
 
-	"Golang/config"
-	"Golang/currencyapi"
+	"github.com/BohdanKyryliuk/golang/config"
+	"github.com/BohdanKyryliuk/golang/currencyapi"
 )
 
 // Client represents a currency converter client with its dependencies

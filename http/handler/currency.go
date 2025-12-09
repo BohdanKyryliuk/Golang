@@ -7,8 +7,8 @@ import (
 	"log"
 	"net/http"
 
-	"Golang/currency_converter"
-	"Golang/currencyapi"
+	"github.com/BohdanKyryliuk/golang/currency_converter"
+	"github.com/BohdanKyryliuk/golang/currencyapi"
 )
 
 // Currency holds the dependencies for currency-related HTTP handlers

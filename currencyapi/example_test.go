@@ -1,13 +1,14 @@
 package currencyapi_test
 
 import (
-	"Golang/currencyapi"
 	"context"
 	"errors"
 	"fmt"
 	"log"
 	"os"
 	"time"
+
+	"github.com/BohdanKyryliuk/golang/currencyapi"
 )
 
 // ExampleNewClient demonstrates how to create a new CurrencyAPI client

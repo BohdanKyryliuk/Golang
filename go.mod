@@ -1,4 +1,4 @@
-module Golang
+module github.com/BohdanKyryliuk/golang
 
 go 1.25
 

@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"Golang/currency_converter"
-	"Golang/http/handler"
+	"github.com/BohdanKyryliuk/golang/currency_converter"
+	"github.com/BohdanKyryliuk/golang/http/handler"
 )
 
 func StartServer() {
