@@ -3,6 +3,7 @@ package currencyapi
 import (
 	"errors"
 	"fmt"
+	"net/http"
 )
 
 // ValidationError represents an input validation error
@@ -41,17 +42,17 @@ func (e *HTTPError) Error() string {
 
 // IsNotFound returns true if the error is a 404 Not Found error
 func (e *HTTPError) IsNotFound() bool {
-	return e.StatusCode == 404
+	return e.StatusCode == http.StatusNotFound
 }
 
 // IsUnauthorized returns true if the error is a 401 Unauthorized error
 func (e *HTTPError) IsUnauthorized() bool {
-	return e.StatusCode == 401
+	return e.StatusCode == http.StatusUnauthorized
 }
 
 // IsRateLimited returns true if the error is a 429 Too Many Requests error
 func (e *HTTPError) IsRateLimited() bool {
-	return e.StatusCode == 429
+	return e.StatusCode == http.StatusTooManyRequests
 }
 
 // APIError represents an error returned by the CurrencyAPI
