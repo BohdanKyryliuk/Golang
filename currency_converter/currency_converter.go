@@ -74,6 +74,11 @@ func New(cfg Config) (*Client, error) {
 	}, nil
 }
 
+// APIClient returns the underlying currencyapi.Client for direct access
+func (c *Client) APIClient() *currencyapi.Client {
+	return c.apiClient
+}
+
 // NewFromEnv creates a new Client by loading configuration from environment variables
 // This is a convenience function that loads config from the config package
 func NewFromEnv() (*Client, error) {
