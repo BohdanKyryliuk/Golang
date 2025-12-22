@@ -10,6 +10,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 )
 
@@ -171,7 +172,7 @@ func (c *Client) Currencies(ctx context.Context, params *CurrenciesParams) (*Cur
 	queryParams := make(map[string]string)
 	if params != nil {
 		if len(params.Currencies) > 0 {
-			queryParams["currencies"] = joinStrings(params.Currencies)
+			queryParams["currencies"] = strings.Join(params.Currencies, ",")
 		}
 		if params.Type != "" {
 			queryParams["type"] = params.Type
@@ -202,7 +203,7 @@ func (c *Client) Latest(ctx context.Context, params *LatestParams) (*LatestRespo
 			queryParams["base_currency"] = params.BaseCurrency
 		}
 		if len(params.Currencies) > 0 {
-			queryParams["currencies"] = joinStrings(params.Currencies)
+			queryParams["currencies"] = strings.Join(params.Currencies, ",")
 		}
 	}
 
@@ -238,7 +239,7 @@ func (c *Client) Historical(ctx context.Context, params *HistoricalParams) (*His
 		queryParams["base_currency"] = params.BaseCurrency
 	}
 	if len(params.Currencies) > 0 {
-		queryParams["currencies"] = joinStrings(params.Currencies)
+		queryParams["currencies"] = strings.Join(params.Currencies, ",")
 	}
 
 	body, err := c.doRequest(ctx, "historical", queryParams)
@@ -271,7 +272,7 @@ func (c *Client) Convert(ctx context.Context, params *ConvertParams) (*ConvertRe
 		queryParams["base_currency"] = params.BaseCurrency
 	}
 	if len(params.Currencies) > 0 {
-		queryParams["currencies"] = joinStrings(params.Currencies)
+		queryParams["currencies"] = strings.Join(params.Currencies, ",")
 	}
 	if params.Value != 0 {
 		queryParams["value"] = fmt.Sprintf("%f", params.Value)
@@ -294,16 +295,4 @@ func (c *Client) Convert(ctx context.Context, params *ConvertParams) (*ConvertRe
 	}
 
 	return &response, nil
-}
-
-// joinStrings joins a slice of strings with commas
-func joinStrings(s []string) string {
-	if len(s) == 0 {
-		return ""
-	}
-	result := s[0]
-	for i := 1; i < len(s); i++ {
-		result += "," + s[i]
-	}
-	return result
 }
