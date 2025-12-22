@@ -11,16 +11,16 @@ import (
 	"github.com/BohdanKyryliuk/golang/currencyapi"
 )
 
-// ExampleNewClient demonstrates how to create a new CurrencyAPI client
-func ExampleNewClient() {
+// ExampleNewHttpApiClient demonstrates how to create a new CurrencyAPI client
+func ExampleNewHttpApiClient() {
 	// Create a basic client with API key
-	client, err := currencyapi.NewClient("your-api-key")
+	client, err := currencyapi.NewHttpApiClient("your-api-key")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Or create a client with custom options
-	client, err = currencyapi.NewClient(
+	client, err = currencyapi.NewHttpApiClient(
 		"your-api-key",
 		currencyapi.WithTimeout(30*time.Second),
 		currencyapi.WithBaseURL("https://api.currencyapi.com/v3/"),
@@ -35,7 +35,7 @@ func ExampleNewClient() {
 // ExampleClient_Latest demonstrates fetching latest exchange rates with error handling
 func ExampleClient_Latest() {
 	apiKey := os.Getenv("CURRENCY_API_KEY")
-	client, err := currencyapi.NewClient(apiKey)
+	client, err := currencyapi.NewHttpApiClient(apiKey)
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 	}
@@ -65,7 +65,7 @@ func ExampleClient_Latest() {
 // ExampleClient_Convert demonstrates currency conversion with error handling
 func ExampleClient_Convert() {
 	apiKey := os.Getenv("CURRENCY_API_KEY")
-	client, err := currencyapi.NewClient(apiKey)
+	client, err := currencyapi.NewHttpApiClient(apiKey)
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 	}
@@ -93,7 +93,7 @@ func ExampleClient_Convert() {
 // Example_errorHandling demonstrates comprehensive error handling following Go best practices
 func Example_errorHandling() {
 	apiKey := os.Getenv("CURRENCY_API_KEY")
-	client, err := currencyapi.NewClient(apiKey)
+	client, err := currencyapi.NewHttpApiClient(apiKey)
 	if err != nil {
 		// Handle client creation error (e.g., missing API key)
 		var validationErr *currencyapi.ValidationError
@@ -162,7 +162,7 @@ func Example_errorHandling() {
 // Example_retryLogic demonstrates implementing retry logic for temporary errors
 func Example_retryLogic() {
 	apiKey := os.Getenv("CURRENCY_API_KEY")
-	client, err := currencyapi.NewClient(apiKey)
+	client, err := currencyapi.NewHttpApiClient(apiKey)
 	if err != nil {
 		log.Fatal(err)
 	}

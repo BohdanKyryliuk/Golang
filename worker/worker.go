@@ -42,7 +42,7 @@ func DefaultConfig() Config {
 // Manager manages multiple currency rate workers
 type Manager struct {
 	config    Config
-	apiClient *currencyapi.Client
+	apiClient currencyapi.Client
 	store     *RateStore
 	workers   []*Worker
 	stopCh    chan struct{}
@@ -52,7 +52,7 @@ type Manager struct {
 }
 
 // NewManager creates a new worker manager
-func NewManager(apiClient *currencyapi.Client, cfg Config) (*Manager, error) {
+func NewManager(apiClient currencyapi.Client, cfg Config) (*Manager, error) {
 	if apiClient == nil {
 		return nil, errors.New("API client is required")
 	}
@@ -143,13 +143,13 @@ func (m *Manager) IsRunning() bool {
 // Worker fetches rates for a specific base currency
 type Worker struct {
 	baseCurrency string
-	apiClient    *currencyapi.Client
+	apiClient    currencyapi.Client
 	store        *RateStore
 	config       Config
 }
 
 // NewWorker creates a new worker for a specific currency
-func NewWorker(baseCurrency string, apiClient *currencyapi.Client, store *RateStore, cfg Config) *Worker {
+func NewWorker(baseCurrency string, apiClient currencyapi.Client, store *RateStore, cfg Config) *Worker {
 	return &Worker{
 		baseCurrency: baseCurrency,
 		apiClient:    apiClient,

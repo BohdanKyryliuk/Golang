@@ -14,7 +14,7 @@ import (
 // Client represents a currency converter client with its dependencies
 type Client struct {
 	config    Config
-	apiClient *currencyapi.Client
+	apiClient currencyapi.Client
 }
 
 // Config holds configuration for the currency converter
@@ -57,7 +57,7 @@ func New(cfg Config) (*Client, error) {
 		cfg.RequestTimeout = 10 * time.Second
 	}
 
-	apiClient, err := currencyapi.NewClient(
+	apiClient, err := currencyapi.NewHttpApiClient(
 		cfg.APIKey,
 		currencyapi.WithTimeout(cfg.Timeout),
 	)
@@ -75,7 +75,7 @@ func New(cfg Config) (*Client, error) {
 }
 
 // APIClient returns the underlying currencyapi.Client for direct access
-func (c *Client) APIClient() *currencyapi.Client {
+func (c *Client) APIClient() currencyapi.Client {
 	return c.apiClient
 }
 
