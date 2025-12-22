@@ -1,19 +1,57 @@
 package web
 
 import (
-	"Golang/HttpHandler"
 	"log"
 	"net/http"
+
+	"github.com/BohdanKyryliuk/golang/currency_converter"
+	"github.com/BohdanKyryliuk/golang/http/handler"
 )
 
 func StartServer() {
+	// Initialize currency converter client from environment variables
+	currencyClient, err := currency_converter.NewFromEnv()
+	if err != nil {
+		log.Printf("Warning: Currency converter not available: %v", err)
+		// Continue without currency endpoints
+	}
+
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", HttpHandler.HelloHandler)
-	mux.HandleFunc("/count", HttpHandler.CounterHandler)
+	mux.HandleFunc("/", handler.Hello)
+	mux.HandleFunc("/count", handler.Counter)
 
-	log.Println("Listening on :3000")
+	// Only register currency handlers if the client is available
+	if currencyClient != nil {
+		currencyHandler := handler.NewCurrency(currencyClient)
+		mux.HandleFunc("/currency/status", currencyHandler.Status)
+		mux.HandleFunc("/currency/currencies", currencyHandler.Currencies)
+		mux.HandleFunc("/currency/latest", currencyHandler.LatestRates)
+	}
 
-	if err := http.ListenAndServe(":3000", mux); err != nil {
+	log.Println("Listening on :3001")
+
+	if err := http.ListenAndServe(":3001", mux); err != nil {
+		log.Fatal(err)
+	}
+}
+
+// StartServerWithConfig starts the server with a provided currency converter client
+// This is useful for testing or when you want more control over the initialization
+func StartServerWithConfig(currencyClient *currency_converter.Client) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", handler.Hello)
+	mux.HandleFunc("/count", handler.Counter)
+
+	if currencyClient != nil {
+		currencyHandler := handler.NewCurrency(currencyClient)
+		mux.HandleFunc("/currency/status", currencyHandler.Status)
+		mux.HandleFunc("/currency/currencies", currencyHandler.Currencies)
+		mux.HandleFunc("/currency/latest", currencyHandler.LatestRates)
+	}
+
+	log.Println("Listening on :3001")
+
+	if err := http.ListenAndServe(":3001", mux); err != nil {
 		log.Fatal(err)
 	}
 }
