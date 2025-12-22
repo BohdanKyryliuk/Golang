@@ -10,6 +10,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 )
 
@@ -20,44 +21,53 @@ const (
 	DefaultTimeout = 10 * time.Second
 )
 
-// Client represents a CurrencyAPI client with configurable options
-type Client struct {
+// Client is a generic interface for currency API clients
+type Client interface {
+	Status(ctx context.Context) (*StatusResponse, error)
+	Currencies(ctx context.Context, params *CurrenciesParams) (*CurrenciesResponse, error)
+	Latest(ctx context.Context, params *LatestParams) (*LatestResponse, error)
+	Historical(ctx context.Context, params *HistoricalParams) (*HistoricalResponse, error)
+	Convert(ctx context.Context, params *ConvertParams) (*ConvertResponse, error)
+}
+
+// HttpApiClient represents an HTTP-based CurrencyAPI client with configurable options
+type HttpApiClient struct {
 	apiKey     string
 	baseURL    string
 	httpClient *http.Client
 }
 
-// ClientOption is a function that configures a Client
-type ClientOption func(*Client)
+// HttpApiClientOption is a function that configures an HttpApiClient
+type HttpApiClientOption func(*HttpApiClient)
 
 // WithBaseURL sets a custom base URL for the API
-func WithBaseURL(baseURL string) ClientOption {
-	return func(c *Client) {
+func WithBaseURL(baseURL string) HttpApiClientOption {
+	return func(c *HttpApiClient) {
 		c.baseURL = baseURL
 	}
 }
 
 // WithHTTPClient sets a custom HTTP client
-func WithHTTPClient(httpClient *http.Client) ClientOption {
-	return func(c *Client) {
+func WithHTTPClient(httpClient *http.Client) HttpApiClientOption {
+	return func(c *HttpApiClient) {
 		c.httpClient = httpClient
 	}
 }
 
 // WithTimeout sets a custom timeout for the HTTP client
-func WithTimeout(timeout time.Duration) ClientOption {
-	return func(c *Client) {
+func WithTimeout(timeout time.Duration) HttpApiClientOption {
+	return func(c *HttpApiClient) {
 		c.httpClient.Timeout = timeout
 	}
 }
 
-// NewClient creates a new CurrencyAPI client with the provided API key and options
-func NewClient(apiKey string, opts ...ClientOption) (*Client, error) {
+// NewHttpApiClient creates a new CurrencyAPI HTTP client with the provided API key and options
+func NewHttpApiClient(apiKey string, opts ...HttpApiClientOption) (Client, error) {
 	if apiKey == "" {
 		return nil, &ValidationError{Field: "apiKey", Message: "API key is required"}
 	}
 
-	c := &Client{
+	c := &HttpApiClient{
 		apiKey:  apiKey,
 		baseURL: DefaultBaseURL,
 		httpClient: &http.Client{
@@ -73,7 +83,7 @@ func NewClient(apiKey string, opts ...ClientOption) (*Client, error) {
 }
 
 // doRequest performs an HTTP request and returns the response body or an error
-func (c *Client) doRequest(ctx context.Context, endpoint string, params map[string]string) ([]byte, error) {
+func (c *HttpApiClient) doRequest(ctx context.Context, endpoint string, params map[string]string) ([]byte, error) {
 	// Build URL with query parameters
 	reqURL, err := url.Parse(c.baseURL + endpoint)
 	if err != nil {
@@ -130,7 +140,7 @@ func (c *Client) doRequest(ctx context.Context, endpoint string, params map[stri
 }
 
 // parseAPIError attempts to parse an API error response
-func (c *Client) parseAPIError(statusCode int, body []byte) error {
+func (c *HttpApiClient) parseAPIError(statusCode int, body []byte) error {
 	var apiErr APIErrorResponse
 	if err := json.Unmarshal(body, &apiErr); err != nil {
 		// If we can't parse the error, return a generic HTTP error
@@ -149,7 +159,7 @@ func (c *Client) parseAPIError(statusCode int, body []byte) error {
 }
 
 // Status returns the current API status
-func (c *Client) Status(ctx context.Context) (*StatusResponse, error) {
+func (c *HttpApiClient) Status(ctx context.Context) (*StatusResponse, error) {
 	body, err := c.doRequest(ctx, "status", nil)
 	if err != nil {
 		return nil, err
@@ -167,11 +177,11 @@ func (c *Client) Status(ctx context.Context) (*StatusResponse, error) {
 }
 
 // Currencies returns available currencies
-func (c *Client) Currencies(ctx context.Context, params *CurrenciesParams) (*CurrenciesResponse, error) {
+func (c *HttpApiClient) Currencies(ctx context.Context, params *CurrenciesParams) (*CurrenciesResponse, error) {
 	queryParams := make(map[string]string)
 	if params != nil {
 		if len(params.Currencies) > 0 {
-			queryParams["currencies"] = joinStrings(params.Currencies)
+			queryParams["currencies"] = strings.Join(params.Currencies, ",")
 		}
 		if params.Type != "" {
 			queryParams["type"] = params.Type
@@ -195,14 +205,14 @@ func (c *Client) Currencies(ctx context.Context, params *CurrenciesParams) (*Cur
 }
 
 // Latest returns the latest exchange rates
-func (c *Client) Latest(ctx context.Context, params *LatestParams) (*LatestResponse, error) {
+func (c *HttpApiClient) Latest(ctx context.Context, params *LatestParams) (*LatestResponse, error) {
 	queryParams := make(map[string]string)
 	if params != nil {
 		if params.BaseCurrency != "" {
 			queryParams["base_currency"] = params.BaseCurrency
 		}
 		if len(params.Currencies) > 0 {
-			queryParams["currencies"] = joinStrings(params.Currencies)
+			queryParams["currencies"] = strings.Join(params.Currencies, ",")
 		}
 	}
 
@@ -223,7 +233,7 @@ func (c *Client) Latest(ctx context.Context, params *LatestParams) (*LatestRespo
 }
 
 // Historical returns historical exchange rates for a specific date
-func (c *Client) Historical(ctx context.Context, params *HistoricalParams) (*HistoricalResponse, error) {
+func (c *HttpApiClient) Historical(ctx context.Context, params *HistoricalParams) (*HistoricalResponse, error) {
 	if params == nil || params.Date == "" {
 		return nil, &ValidationError{
 			Field:   "date",
@@ -238,7 +248,7 @@ func (c *Client) Historical(ctx context.Context, params *HistoricalParams) (*His
 		queryParams["base_currency"] = params.BaseCurrency
 	}
 	if len(params.Currencies) > 0 {
-		queryParams["currencies"] = joinStrings(params.Currencies)
+		queryParams["currencies"] = strings.Join(params.Currencies, ",")
 	}
 
 	body, err := c.doRequest(ctx, "historical", queryParams)
@@ -258,7 +268,7 @@ func (c *Client) Historical(ctx context.Context, params *HistoricalParams) (*His
 }
 
 // Convert converts an amount from one currency to another
-func (c *Client) Convert(ctx context.Context, params *ConvertParams) (*ConvertResponse, error) {
+func (c *HttpApiClient) Convert(ctx context.Context, params *ConvertParams) (*ConvertResponse, error) {
 	if params == nil {
 		return nil, &ValidationError{
 			Field:   "params",
@@ -271,7 +281,7 @@ func (c *Client) Convert(ctx context.Context, params *ConvertParams) (*ConvertRe
 		queryParams["base_currency"] = params.BaseCurrency
 	}
 	if len(params.Currencies) > 0 {
-		queryParams["currencies"] = joinStrings(params.Currencies)
+		queryParams["currencies"] = strings.Join(params.Currencies, ",")
 	}
 	if params.Value != 0 {
 		queryParams["value"] = fmt.Sprintf("%f", params.Value)
@@ -294,16 +304,4 @@ func (c *Client) Convert(ctx context.Context, params *ConvertParams) (*ConvertRe
 	}
 
 	return &response, nil
-}
-
-// joinStrings joins a slice of strings with commas
-func joinStrings(s []string) string {
-	if len(s) == 0 {
-		return ""
-	}
-	result := s[0]
-	for i := 1; i < len(s); i++ {
-		result += "," + s[i]
-	}
-	return result
 }

@@ -14,7 +14,7 @@ func TestNewClient(t *testing.T) {
 	tests := []struct {
 		name    string
 		apiKey  string
-		opts    []ClientOption
+		opts    []HttpApiClientOption
 		wantErr bool
 	}{
 		{
@@ -30,7 +30,7 @@ func TestNewClient(t *testing.T) {
 		{
 			name:   "with custom timeout",
 			apiKey: "test-api-key",
-			opts: []ClientOption{
+			opts: []HttpApiClientOption{
 				WithTimeout(30 * time.Second),
 			},
 			wantErr: false,
@@ -39,13 +39,13 @@ func TestNewClient(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			client, err := NewClient(tt.apiKey, tt.opts...)
+			client, err := NewHttpApiClient(tt.apiKey, tt.opts...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("NewClient() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("NewHttpApiClient() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !tt.wantErr && client == nil {
-				t.Error("NewClient() returned nil client")
+				t.Error("NewHttpApiClient() returned nil client")
 			}
 		})
 	}
@@ -82,7 +82,7 @@ func TestClient_Latest(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client, err := NewClient("test-api-key", WithBaseURL(server.URL+"/"))
+	client, err := NewHttpApiClient("test-api-key", WithBaseURL(server.URL+"/"))
 	if err != nil {
 		t.Fatalf("Failed to create client: %v", err)
 	}
@@ -119,7 +119,7 @@ func TestClient_APIError(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client, _ := NewClient("invalid-key", WithBaseURL(server.URL+"/"))
+	client, _ := NewHttpApiClient("invalid-key", WithBaseURL(server.URL+"/"))
 
 	ctx := context.Background()
 	_, err := client.Latest(ctx, nil)
@@ -155,7 +155,7 @@ func TestClient_RateLimitError(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client, _ := NewClient("test-key", WithBaseURL(server.URL+"/"))
+	client, _ := NewHttpApiClient("test-key", WithBaseURL(server.URL+"/"))
 
 	ctx := context.Background()
 	_, err := client.Latest(ctx, nil)
@@ -186,7 +186,7 @@ func TestClient_ContextCancellation(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client, _ := NewClient("test-key", WithBaseURL(server.URL+"/"))
+	client, _ := NewHttpApiClient("test-key", WithBaseURL(server.URL+"/"))
 
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel() // Cancel immediately
@@ -204,7 +204,7 @@ func TestClient_ContextCancellation(t *testing.T) {
 }
 
 func TestValidationError(t *testing.T) {
-	client, _ := NewClient("test-key")
+	client, _ := NewHttpApiClient("test-key")
 
 	ctx := context.Background()
 	_, err := client.Historical(ctx, nil)
