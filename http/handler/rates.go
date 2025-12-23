@@ -1,12 +1,11 @@
 package handler
 
 import (
-	"encoding/json"
 	"errors"
-	"net/http"
 	"strings"
 
 	"github.com/BohdanKyryliuk/golang/worker"
+	"github.com/gin-gonic/gin"
 )
 
 // Rates holds the dependencies for rate-related HTTP handlers
@@ -21,12 +20,12 @@ func NewRates(manager *worker.Manager) *Rates {
 
 // GetRate handles requests for cached rates of a specific base currency
 // Query params: base (base currency, required)
-func (h *Rates) GetRate(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+func (h *Rates) GetRate(c *gin.Context) {
+	c.Header("Content-Type", "application/json; charset=utf-8")
 
-	baseCurrency := strings.ToUpper(r.URL.Query().Get("base"))
+	baseCurrency := strings.ToUpper(c.Query("base"))
 	if baseCurrency == "" {
-		http.Error(w, `{"error": "base currency parameter is required"}`, http.StatusBadRequest)
+		c.AbortWithStatusJSON(400, gin.H{"error": "base currency parameter is required"})
 		return
 	}
 
@@ -34,40 +33,27 @@ func (h *Rates) GetRate(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		var notFoundErr *worker.NotFoundError
 		if errors.As(err, &notFoundErr) {
-			http.Error(w, `{"error": "rates not found for currency: `+baseCurrency+`"}`, http.StatusNotFound)
+			c.AbortWithStatusJSON(404, gin.H{"error": "rates not found for currency: " + baseCurrency})
 			return
 		}
-		http.Error(w, `{"error": "failed to get rates"}`, http.StatusInternalServerError)
+		c.AbortWithStatusJSON(500, gin.H{"error": "failed to get rates"})
 		return
 	}
 
-	jsonBytes, err := json.Marshal(rateData)
-	if err != nil {
-		http.Error(w, `{"error": "failed to marshal response"}`, http.StatusInternalServerError)
-		return
-	}
-
-	_, _ = w.Write(jsonBytes)
+	c.JSON(200, rateData)
 }
 
 // GetAllRates handles requests for all cached rates
-func (h *Rates) GetAllRates(w http.ResponseWriter, _ *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+func (h *Rates) GetAllRates(c *gin.Context) {
+	c.Header("Content-Type", "application/json; charset=utf-8")
 
 	allRates := h.manager.GetAllRates()
-
-	jsonBytes, err := json.Marshal(allRates)
-	if err != nil {
-		http.Error(w, `{"error": "failed to marshal response"}`, http.StatusInternalServerError)
-		return
-	}
-
-	_, _ = w.Write(jsonBytes)
+	c.JSON(200, allRates)
 }
 
 // GetWorkerStatus handles requests for worker status
-func (h *Rates) GetWorkerStatus(w http.ResponseWriter, _ *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+func (h *Rates) GetWorkerStatus(c *gin.Context) {
+	c.Header("Content-Type", "application/json; charset=utf-8")
 
 	status := struct {
 		Running    bool     `json:"running"`
@@ -77,11 +63,5 @@ func (h *Rates) GetWorkerStatus(w http.ResponseWriter, _ *http.Request) {
 		Currencies: h.manager.GetCurrencies(),
 	}
 
-	jsonBytes, err := json.Marshal(status)
-	if err != nil {
-		http.Error(w, `{"error": "failed to marshal response"}`, http.StatusInternalServerError)
-		return
-	}
-
-	_, _ = w.Write(jsonBytes)
+	c.JSON(200, status)
 }

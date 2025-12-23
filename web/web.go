@@ -3,15 +3,14 @@ package web
 import (
 	"context"
 	"log"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"github.com/BohdanKyryliuk/golang/currency_converter"
 	"github.com/BohdanKyryliuk/golang/http/handler"
 	"github.com/BohdanKyryliuk/golang/worker"
+	"github.com/gin-gonic/gin"
 )
 
 // ServerConfig holds configuration for the web server
@@ -48,18 +47,27 @@ func StartServerWithConfig(cfg ServerConfig) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", handler.Hello)
-	mux.HandleFunc("/count", handler.Counter)
+	// Create Gin router
+	router := gin.Default()
+
+	// Register basic routes
+	router.GET("/", handler.Hello)
+	router.GET("/count", handler.Counter)
+	router.POST("/count", handler.Counter)
 
 	var workerManager *worker.Manager
 
 	// Only register currency handlers if the client is available
 	if cfg.CurrencyClient != nil {
 		currencyHandler := handler.NewCurrency(cfg.CurrencyClient)
-		mux.HandleFunc("/currency/status", currencyHandler.Status)
-		mux.HandleFunc("/currency/currencies", currencyHandler.Currencies)
-		mux.HandleFunc("/currency/latest", currencyHandler.LatestRates)
+
+		// Create currency route group
+		currencyGroup := router.Group("/currency")
+		{
+			currencyGroup.GET("/status", currencyHandler.Status)
+			currencyGroup.GET("/currencies", currencyHandler.Currencies)
+			currencyGroup.GET("/latest", currencyHandler.LatestRates)
+		}
 
 		// Initialize and start workers if config is provided
 		if cfg.WorkerConfig != nil {
@@ -73,18 +81,22 @@ func StartServerWithConfig(cfg ServerConfig) {
 				} else {
 					// Register rate handlers
 					ratesHandler := handler.NewRates(workerManager)
-					mux.HandleFunc("/rates", ratesHandler.GetRate)
-					mux.HandleFunc("/rates/all", ratesHandler.GetAllRates)
-					mux.HandleFunc("/rates/status", ratesHandler.GetWorkerStatus)
+
+					// Create rates route group
+					ratesGroup := router.Group("/rates")
+					{
+						ratesGroup.GET("", ratesHandler.GetRate)
+						ratesGroup.GET("/all", ratesHandler.GetAllRates)
+						ratesGroup.GET("/status", ratesHandler.GetWorkerStatus)
+					}
 				}
 			}
 		}
 	}
 
-	server := &http.Server{
-		Addr:    ":3001",
-		Handler: mux,
-	}
+	// Create HTTP server
+	server := &gin.Engine{}
+	*server = *router
 
 	// Handle graceful shutdown
 	go func() {
@@ -99,20 +111,12 @@ func StartServerWithConfig(cfg ServerConfig) {
 			workerManager.Stop()
 		}
 
-		// Shutdown HTTP server with timeout
-		shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer shutdownCancel()
-
-		if err := server.Shutdown(shutdownCtx); err != nil {
-			log.Printf("Server shutdown error: %v", err)
-		}
-
 		cancel()
 	}()
 
 	log.Println("Listening on :3001")
 
-	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+	if err := router.Run(":3001"); err != nil {
 		log.Fatal(err)
 	}
 }
