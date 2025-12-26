@@ -1,15 +1,13 @@
 package handler
 
 import (
-	"context"
 	"errors"
-	"fmt"
 	"log"
-	"net/http"
 	"strings"
 
 	"github.com/BohdanKyryliuk/golang/currency_converter"
 	"github.com/BohdanKyryliuk/golang/currencyapi"
+	"github.com/gin-gonic/gin"
 )
 
 // Currency holds the dependencies for currency-related HTTP handlers
@@ -23,82 +21,66 @@ func NewCurrency(client *currency_converter.Client) *Currency {
 }
 
 // Status handles requests for currency API status
-func (h *Currency) Status(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+func (h *Currency) Status(c *gin.Context) {
+	c.Header("Content-Type", "application/json; charset=utf-8")
 
-	status, err := h.client.CheckStatus(r.Context())
+	status, err := h.client.CheckStatus(c.Request.Context())
 	if err != nil {
-		handleCurrencyError(w, err)
+		handleCurrencyError(c, err)
 		return
 	}
 
-	fmt.Fprintf(w, "%s", status)
+	c.String(200, "%s", status)
 }
 
 // Currencies handles requests for available currencies
-func (h *Currency) Currencies(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+func (h *Currency) Currencies(c *gin.Context) {
+	c.Header("Content-Type", "application/json; charset=utf-8")
 
-	currencies, err := h.client.GetCurrencies(r.Context())
+	currencies, err := h.client.GetCurrencies(c.Request.Context())
 	if err != nil {
-		handleCurrencyError(w, err)
+		handleCurrencyError(c, err)
 		return
 	}
 
-	fmt.Fprintf(w, "%s", currencies)
+	c.String(200, "%s", currencies)
 }
 
 // LatestRates handles requests for latest exchange rates
 // Query params: base (base currency), currencies (comma-separated list)
-func (h *Currency) LatestRates(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+func (h *Currency) LatestRates(c *gin.Context) {
+	c.Header("Content-Type", "application/json; charset=utf-8")
 
 	// Parse query parameters
 	params := &currency_converter.LatestRatesParams{
-		BaseCurrency: r.URL.Query().Get("base"),
+		BaseCurrency: c.Query("base"),
 	}
-	if currencies := r.URL.Query().Get("currencies"); currencies != "" {
+	if currencies := c.Query("currencies"); currencies != "" {
 		params.Currencies = strings.Split(currencies, ",")
 	}
 
-	rates, err := h.client.GetLatestRates(r.Context(), params)
+	rates, err := h.client.GetLatestRates(c.Request.Context(), params)
 	if err != nil {
-		handleCurrencyError(w, err)
+		handleCurrencyError(c, err)
 		return
 	}
 
-	fmt.Fprintf(w, "%s", rates)
-}
-
-// CurrencyStatus is a legacy handler for backward compatibility
-// Deprecated: Use NewCurrency().Status instead
-func CurrencyStatus(client *currency_converter.Client) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-
-		status, err := client.CheckStatus(context.Background())
-		if err != nil {
-			handleCurrencyError(w, err)
-			return
-		}
-
-		fmt.Fprintf(w, "%s", status)
-	}
+	c.String(200, "%s", rates)
 }
 
 // handleCurrencyError handles errors from the currency converter with appropriate HTTP responses
-func handleCurrencyError(w http.ResponseWriter, err error) {
+func handleCurrencyError(c *gin.Context, err error) {
 	log.Printf("Currency API error: %v", err)
 
 	// Check for specific error types and set appropriate status codes
 	var apiErr *currencyapi.APIError
 	if errors.As(err, &apiErr) {
 		if apiErr.IsInvalidAPIKey() {
-			http.Error(w, `{"error": "Service configuration error"}`, http.StatusInternalServerError)
+			c.AbortWithStatusJSON(500, gin.H{"error": "Service configuration error"})
 			return
 		}
 		if apiErr.IsQuotaExceeded() {
-			http.Error(w, `{"error": "Service temporarily unavailable, please try again later"}`, http.StatusServiceUnavailable)
+			c.AbortWithStatusJSON(503, gin.H{"error": "Service temporarily unavailable, please try again later"})
 			return
 		}
 	}
@@ -106,17 +88,17 @@ func handleCurrencyError(w http.ResponseWriter, err error) {
 	var httpErr *currencyapi.HTTPError
 	if errors.As(err, &httpErr) {
 		if httpErr.IsRateLimited() {
-			http.Error(w, `{"error": "Rate limited, please try again later"}`, http.StatusTooManyRequests)
+			c.AbortWithStatusJSON(429, gin.H{"error": "Rate limited, please try again later"})
 			return
 		}
 	}
 
 	// Check if it's a temporary error
 	if currencyapi.IsTemporaryError(err) {
-		http.Error(w, `{"error": "Service temporarily unavailable"}`, http.StatusServiceUnavailable)
+		c.AbortWithStatusJSON(503, gin.H{"error": "Service temporarily unavailable"})
 		return
 	}
 
 	// Default error response
-	http.Error(w, `{"error": "Failed to fetch currency data"}`, http.StatusInternalServerError)
+	c.AbortWithStatusJSON(500, gin.H{"error": "Failed to fetch currency data"})
 }

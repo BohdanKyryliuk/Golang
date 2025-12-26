@@ -2,45 +2,47 @@ package handler
 
 import (
 	"fmt"
-	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 // Hello handles the hello world endpoint
-func Hello(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+func Hello(c *gin.Context) {
+	c.Header("Content-Type", "text/html; charset=utf-8")
 	// Step 1: Write a simple Hello World response
-	_, _ = w.Write([]byte("<h1>Hello, World!</h1>"))
+	c.Writer.WriteString("<h1>Hello, World!</h1>")
 
 	// Step 2: Read query parameter and respond accordingly
-	if r.FormValue("q") != "" {
-		fmt.Fprintf(w, `
-	           <body>
-	               <h1>Hello, %s!</h1>
-	           </body>
-	       `, r.FormValue("q"))
+	q := c.Query("q")
+	if q != "" {
+		c.Writer.WriteString(fmt.Sprintf(`
+           <body>
+               <h1>Hello, %s!</h1>
+           </body>
+       `, q))
 		return
 	}
 
-	fmt.Fprintf(w, `
-	       <body>
-	           <form action="/" method="GET">
-	               <label>Enter your name</label>
-	               <input name="q">
-	               <button type="submit">Submit</button>
-	           </form>
-	       </body>
-	   `)
+	c.Writer.WriteString(`
+       <body>
+           <form action="/" method="GET">
+               <label>Enter your name</label>
+               <input name="q">
+               <button type="submit">Submit</button>
+           </form>
+       </body>
+   `)
 }
 
 // Counter handles the counter endpoint
-func Counter(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+func Counter(c *gin.Context) {
+	c.Header("Content-Type", "text/html; charset=utf-8")
 	// Step 3: Handle counter with POST method
-	if r.Method == "POST" {
-		count, _ := strconv.Atoi(r.FormValue("counter"))
+	if c.Request.Method == "POST" {
+		count, _ := strconv.Atoi(c.PostForm("counter"))
 		count++
-		fmt.Fprintf(w, `
+		c.Writer.WriteString(fmt.Sprintf(`
             <body>
                 <form action="/count" method="POST">
                     <label>Counter</label>
@@ -49,11 +51,11 @@ func Counter(w http.ResponseWriter, r *http.Request) {
                 </form>
                 <a href="/count">Reset</a>
             </body>
-        `, count)
+        `, count))
 		return
 	}
 
-	fmt.Fprintf(w, `
+	c.Writer.WriteString(`
             <body>
                 <form action="/count" method="POST">
                     <label>Counter</label>
